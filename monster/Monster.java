@@ -7,12 +7,22 @@ import java.util.Random;
 import game.map.Map;
 public class Monster extends Character{
   private int id;
+  private int vision;
   public Monster(){
     Random random=new Random();
     id=random.nextInt(6);
 
   }
   //Controller monsterController=new Controller();
+  public boolean findPlayer(){
+    return false;
+  }
+  public void huntPlayer(){
+    move();
+  }
+  public int getVision(){
+    return vision;
+  }
   public void move(){
       //random from 0 to 3
       Random random=new Random();

@@ -23,7 +23,7 @@ public class Quái{
 		}
 		return false;
 	}
-	
+
 }
 public class Player{
 	public void defense(Character x){
