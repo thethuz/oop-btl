@@ -34,36 +34,39 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 	private Animation robotAnim, heliBoyAnim;
 	private Graphics second;
 	private URL base;
+	//
 	private static Background bg1, bg2;
-
+//Map
 	public static Image tilegrassTop, tilegrassBot, tilegrassLeft,
 			tilegrassRight, tiledirt;
 	private List<Tile> tilearray = new ArrayList<Tile>();
 
 	@Override
 	public void init() {
+		//Game
 		setSize(800, 480);
 		setBackground(Color.BLACK);
 		setFocusable(true);
 		addKeyListener(this);
+
 		Frame frame = (Frame) this.getParent().getParent();
 		frame.setTitle("Manh Hung Game");
-
+		//Game
 		try {
 			base = getDocumentBase();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		// Image Setups
+		// Player
 		character = getImage(base, "res/character.png");
 		character2 = getImage(base, "res/character2.png");
 		character3 = getImage(base, "res/character3.png");
 
 		characterDown = getImage(base, "res/down.png");
 		characterJumped = getImage(base, "res/jumped.png");
-
+//Game
 		background = getImage(base, "res/background.png");
-
+//Enemy
 		heliboy = getImage(base, "res/heliboy.png");
 		heliboy2 = getImage(base, "res/heliboy2.png");
 		heliboy3 = getImage(base, "res/heliboy3.png");
@@ -87,7 +90,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		heliBoyAnim.addFrame(heliboy2, 100);
 
 		currentSprite = robotAnim.getImage();
-
+//Map
 		tiledirt = getImage(base, "res/tiledirt.png");
 		tilegrassTop = getImage(base, "res/tilegrasstop.png");
 		tilegrassBot = getImage(base, "res/tilegrassbot.png");
