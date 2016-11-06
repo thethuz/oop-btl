@@ -64,9 +64,9 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 
 		characterDown = getImage(base, "res/down.png");
 		characterJumped = getImage(base, "res/jumped.png");
-//Game
+		//Game
 		background = getImage(base, "res/background.png");
-//Enemy
+		//Enemy
 		heliboy = getImage(base, "res/heliboy.png");
 		heliboy2 = getImage(base, "res/heliboy2.png");
 		heliboy3 = getImage(base, "res/heliboy3.png");
@@ -90,7 +90,7 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 		heliBoyAnim.addFrame(heliboy2, 100);
 
 		currentSprite = robotAnim.getImage();
-//Map
+		//Map
 		tiledirt = getImage(base, "res/tiledirt.png");
 		tilegrassTop = getImage(base, "res/tilegrasstop.png");
 		tilegrassBot = getImage(base, "res/tilegrassbot.png");
@@ -202,14 +202,14 @@ public class StartingClass extends Applet implements Runnable, KeyListener {
 				g.setColor(Color.YELLOW);
 				g.fillRect(b.getX(), b.getY(), 10, 5);
 			}
-//			g.drawRect((int) robot.rect.getX(), (int) robot.rect.getY(),
-//					(int) robot.rect.getWidth(), (int) robot.rect.getHeight());
-//			g.drawRect((int) robot.rect2.getX(), (int) robot.rect2.getY(),
-//					(int) robot.rect2.getWidth(), (int) robot.rect2.getHeight());
-//			g.drawRect((int) robot.rect3.getX(), (int) robot.rect3.getY(),
-//					(int) robot.rect3.getWidth(), (int) robot.rect3.getHeight());
-//			g.drawRect((int) robot.rect4.getX(), (int) robot.rect4.getY(),
-//					(int) robot.rect4.getWidth(), (int) robot.rect4.getHeight());
+			//			g.drawRect((int) robot.rect.getX(), (int) robot.rect.getY(),
+			//					(int) robot.rect.getWidth(), (int) robot.rect.getHeight());
+			//			g.drawRect((int) robot.rect2.getX(), (int) robot.rect2.getY(),
+			//					(int) robot.rect2.getWidth(), (int) robot.rect2.getHeight());
+			//			g.drawRect((int) robot.rect3.getX(), (int) robot.rect3.getY(),
+			//					(int) robot.rect3.getWidth(), (int) robot.rect3.getHeight());
+			//			g.drawRect((int) robot.rect4.getX(), (int) robot.rect4.getY(),
+			//					(int) robot.rect4.getWidth(), (int) robot.rect4.getHeight());
 			g.drawImage(currentSprite, robot.getCenterX() - 61, robot.getCenterY() - 63, this);
 			g.drawImage(heliBoyAnim.getImage(), hb.getCenterX() - 48, hb.getCenterY() - 48, this);
 			g.drawImage(heliBoyAnim.getImage(), hb2.getCenterX() - 48, hb2.getCenterY() - 48, this);

@@ -11,6 +11,7 @@ public abstract class Character{
   public abstract void attack(Character enemy);
   public abstract void dead();
   public abstract void reborn();
+  public abstract void defense(Character enemy);
   public abstract void defense(Character enemy){
     attack(enemy);
   }
