@@ -1,10 +1,15 @@
 package game.player;
-import data.player.*;
+
+//import data.player.*;
 import game.player.Controller;
-import graphic.player.*;
+//import graphic.player.*;
 import game.Character;
 import game.map.Map;
+import java.io.Serializable;
+
 public class Player extends Character{
+  private int targetX=0;
+  private int targetY=0;
   public Player(){
     setName("Player");
     loadPlayer();
@@ -14,38 +19,41 @@ public class Player extends Character{
     if (control=="up") {
       if (Map.standable(getPositionX(),getPositionY()++))
       setPositionY(getPositionY()++);
+      targetX=0;
+      targetY=1;
     }
     if (control=="down") {
       if (Map.standable(getPositionX(),getPositionY()--))
       setPositionY(getPositionY()--);
+      targetX=0;
+      targetY=-1;
     }
     if (control=="right") {
       if (Map.standable(getPositionX()++,getPositionY()))
       setPositionX(getPositionX()++);
+      targetX=1;
+      targetY=0;
     }
     if (control=="left") {
       if (Map.standable(getPositionX()--,getPositionY()))
       setPositionX(getPositionX()--);
+      targetX=-1;
+      targetY=0;
     }
     //anmation move
   }
   public void loadPlayer(){
-    setHealth(PlayerLoader.health());
-    setDamage(PlayerLoader.health());
-    setDefense(PlayerLoader.health());
-    setAttackSpeed(PlayerLoader.health());
-    setMoveSpeed(PlayerLoader.health());
-    setPositionX
-    setPositionY
-    setTimeReborn
+
   }
   public void savePlayer(){
 
   }
-  public void attack(Character monster){
+  public void attack(){
+    if()
     int healthDecrease= this.getDamage-monster.getDefense();
     if (healthDecrease<0) healthDecrease=0;
     monster.setHealth(monster.getHealth()-healthDecrease);
+    monster.defense(this);
     //animation attack
   }
   public void dead(){

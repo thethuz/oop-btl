@@ -6,18 +6,19 @@ public abstract class Character{
   private int moveSpeed;
   private int attackSpeed;
   private int timeReborn;
-  private int positionX, positionY;
+  private static int positionX, positionY;
   public abstract void move(String control);
-  public abstract void attack(Character enemy);
+  public abstract void attack();
   public abstract void dead();
   public abstract void reborn();
-  public abstract void defense(Character enemy);
-  public abstract void defense(Character enemy){
-    attack(enemy);
-  }
+  //public abstract void defense(Character enemy);
+  // public void defense(Character enemy){
+  //   attack(enemy);
+  // }
   public int getHealth(){
     return health;
   }
+
   public void setHealth(int health){
     if (health<=0) {
       this.health=0;

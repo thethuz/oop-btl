@@ -1,7 +1,8 @@
 package game.monster;
-import data.monster.*;
+
+//import data.monster.*;
 import game.monster.Controller;
-import graphic.monster.*;
+//import graphic.monster.*;
 import game.Character;
 import java.util.Random;
 import game.map.Map;
@@ -17,6 +18,7 @@ public class Monster extends Character{
   public boolean findPlayer(){
     return false;
   }
+
   public void huntPlayer(){
     move();
   }

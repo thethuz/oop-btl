@@ -23,7 +23,7 @@ public class Game extends Applet implements Runnable, KeyListener{
     Running, Dead
   }
   GameState state= GameState.Running;
-  private Player player;
+  private Player player=new Player();
   private Monster[] monster;
   private DangerousMonster[] dangerousMonster;
   private Graphics second;
@@ -46,7 +46,7 @@ public class Game extends Applet implements Runnable, KeyListener{
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-    player=new Player();
+    //player=new Player();
     monster=new Monster[100];
     dangerousMonster=new DangerousMonster[20];
   }
@@ -97,7 +97,24 @@ public class Game extends Applet implements Runnable, KeyListener{
 
   @Override
   public void keyPressed(KeyEvent e){
+    switch (e.getKeyCode()){
+      case KeyEvent.VK_UP:
+      player.move("up");
+      break;
+      case KeyEvent.VK_DOWN:
+      player.move("down");
+      break;
+      case KeyEvent.VK_RIGHT:
+      player.move("right");
+      break;
+      case KeyEvent.VK_LEFT:
+      player.move("left");
+      break;
+      case KeyEvent.VK_SPACE:
 
+      player.attack();
+      break;
+    }
   }
 
   @Override

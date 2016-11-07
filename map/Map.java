@@ -1,7 +1,10 @@
 package game.map;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import game.monster.Monster;
+import game.player.Player;
 
 public class Map{
   private String name;
@@ -70,14 +73,16 @@ public class Map{
   }
 }
 class MapItem{
-  boolean playerLocate=false;
-  boolean monsterLocate=false;
-  boolean moveable;
-  public void setMoveable(boolean can){
-    moveable=can;
+  Player playerLocate=null;
+  Monster monsterLocate=null;
+  boolean playerLocateStt;
+  boolean monsterLocateStt;
+  boolean standable;
+  public void setStandable(boolean can){
+    standable=can;
   }
   public boolean moveable(int positionX, int positionY){
-    if(!playerLocate && !monsterLocate && moveable) return true;
+    if(!playerLocate && !monsterLocate && standable) return true;
     return false;
   }
   public void setPlayerLocateStt(boolean stt){
@@ -86,10 +91,31 @@ class MapItem{
   public void setMonsterLocateStt(boolean stt){
     monsterLocate=stt;
   }
-  public boolean getPlayerLocate(){
-    return playerLocate;
+  public boolean getPlayerLocateStt(){
+    return playerLocateStt;
   }
-  public boolean getMonsterLocate(){
-    return playerLocate;
+  public boolean getMonsterLocateStt(){
+    return monsterLocateStt;
+  }
+
+  public Player getPlayerLocate(){
+    if(getMonsterLocateStt()){
+      return playerLocate;
+    }else
+      return null;
+  }
+  public Monster getMonsterLocate(){
+    if(getMonsterLocateStt()){
+      return monsterLocate;
+    }else
+      return null;
+  }
+  public void setMonsterLocate(Monster x){
+    monsterLocate=x;
+    setMonsterLocateStt(true);
+  }
+  public void setPlayerLocate(Player x){
+    playerLocate=x;
+    setMonsterLocateStt(true);
   }
 }

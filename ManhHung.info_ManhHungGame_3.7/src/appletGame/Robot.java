@@ -62,7 +62,7 @@ public class Robot {
 		if (speedY > 3) {
 			jumped = true;
 		}
-		
+
 		// Prevents going beyond X coordinate of 0
 		if (centerX + speedX <= 60) {
 			centerX = 61;
