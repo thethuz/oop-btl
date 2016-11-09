@@ -1,4 +1,7 @@
-public class DangerousMonster extends Monster{
+package game.monster;
+import java.io.Serializable;
+
+public class DangerousMonster extends Monster implements Serializable{
   public boolean findPlayer(){
     if()
   }

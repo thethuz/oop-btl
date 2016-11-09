@@ -5,8 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import game.monster.Monster;
 import game.player.Player;
+import java.io.Serializable;
 
-public class Map{
+public class Map implements Serializable{
   private String name;
   private int sizeX=100,sizeY=100;
   private MapItem[][] map;
@@ -72,7 +73,7 @@ public class Map{
     return sizeY;
   }
 }
-class MapItem{
+class MapItem implements Serializable{
   Player playerLocate=null;
   Monster monsterLocate=null;
   boolean playerLocateStt;

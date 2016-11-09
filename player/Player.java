@@ -7,7 +7,7 @@ import game.Character;
 import game.map.Map;
 import java.io.Serializable;
 
-public class Player extends Character{
+public class Player extends Character implements Serializable{
   private int targetX=0;
   private int targetY=0;
   public Player(){
@@ -49,11 +49,10 @@ public class Player extends Character{
 
   }
   public void attack(){
-    if()
-    int healthDecrease= this.getDamage-monster.getDefense();
-    if (healthDecrease<0) healthDecrease=0;
-    monster.setHealth(monster.getHealth()-healthDecrease);
-    monster.defense(this);
+    //B1: Kiểm tra ô target xem có quái ở đó không?
+    //Ô target là ô gần người chơi nhất theo phím di chuyển được ấn cuối cùng.
+    //B2: Nếu có quái, gọi đến hàm sát thương của quái
+    //B3: Kết thúc tấn công
     //animation attack
   }
   public void dead(){

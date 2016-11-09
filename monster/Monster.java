@@ -6,7 +6,9 @@ import game.monster.Controller;
 import game.Character;
 import java.util.Random;
 import game.map.Map;
-public class Monster extends Character{
+import java.io.Serializable;
+
+public class Monster extends Character implements Serializable{
   private int id;
   private int vision;
   public Monster(){

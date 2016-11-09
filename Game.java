@@ -11,6 +11,7 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import player.*;
 import map.*;
 import monster.*;
 
-public class Game extends Applet implements Runnable, KeyListener{
+public class Game extends Applet implements Runnable, KeyListener,Serializable{
   enum GameState{
     Running, Dead
   }
