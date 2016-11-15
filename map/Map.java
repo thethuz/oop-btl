@@ -73,16 +73,25 @@ public class Map implements Serializable{
     return sizeY;
   }
 }
+
+/**
+*
+*
+*
+**/
 class MapItem implements Serializable{
   Player playerLocate=null;
   Monster monsterLocate=null;
-  boolean playerLocateStt;
-  boolean monsterLocateStt;
-  boolean standable;
+  private boolean playerLocateStt;
+  private boolean monsterLocateStt;
+  private boolean standable;
   public void setStandable(boolean can){
     standable=can;
   }
-  public boolean moveable(int positionX, int positionY){
+  function boolean getStandable(){
+    return standable;
+  }
+  public boolean isMoveable(int positionX, int positionY){
     if(!playerLocate && !monsterLocate && standable) return true;
     return false;
   }

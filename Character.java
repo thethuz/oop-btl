@@ -1,14 +1,34 @@
 package game;
+import game.map.Map;
 public abstract class Character{
+  //máu
   private int health;
+  //damage,def
   private int damage,defense;
+  //tên
   private String name;
+  //tốc độ di chuyển
   private int moveSpeed;
+  //tốc độ đánh
   private int attackSpeed;
+  //thời gian chờ hồi sinh
   private int timeReborn;
+  //vị trí
   private static int positionX, positionY;
-  public abstract void move(String control);
+
+  public abstract void move(String control, Map map);
   public abstract void attack();
+  public void defend(int enemyDamage){
+    if (enemyDamage-defense>0){
+      health=health-(enemyDamage-defense);
+      if (health<0) {
+        health=0;
+        dead();
+      }
+    }
+    health=health-0;
+
+  }
   public abstract void dead();
   public abstract void reborn();
   //public abstract void defense(Character enemy);

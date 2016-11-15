@@ -7,11 +7,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-class Loader{
-  public void loader(){
-    Game myGame = new Game();
+class Loader implements Serializable {
+  private int x;
+  public void loader(Loader myGame){
+    //Game myGame = new Game();
+    //LoadGame myGame
+
     try {
-      FileOutputStream f = new FileOutputStream("game.dat");
+      FileOutputStream f = new FileOutputStream("student.dat");
       ObjectOutputStream oStream = new ObjectOutputStream(f);
       oStream.writeObject(myGame);
       oStream.close();
@@ -19,13 +22,14 @@ class Loader{
       System.out.println("Error Write file");
     }
 
-    Game myGame = null;
+    //Game myGame = null;
 
     try {
       FileInputStream f = new FileInputStream("student.dat");
       ObjectInputStream inStream = new ObjectInputStream(f);
-      myGame = (Game) inStream.readObject();
+      myGame = (Loader) inStream.readObject();
       inStream.close();
+      System.out.println(myGame);
     } catch (ClassNotFoundException e){
       System.out.println("Class not found");
     } catch (IOException e){
@@ -39,11 +43,11 @@ public class LoadGame implements Serializable{
   String xxx="xxxxxxx";
   public static void main(String[] args){
     Loader loaderX=new Loader();
-    loaderX.loader();
+    loaderX.loader(loaderX);
   }
 }
 class MyStudent implements Serializable{
   String name="Nguyen Vu The Thu";
   int age = 21;
-  LoadGame loadcc=new LoadGame();
+  //LoadGame loadcc=new LoadGame();
 }
