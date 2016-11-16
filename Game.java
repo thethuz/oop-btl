@@ -22,11 +22,11 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import player.*;
-import map.*;
-import monster.*;
+import game.player.*;
+import game.map.*;
+import game.monster.*;
 
-public class Game extends Applet implements Runnable, KeyListener, Serializable{
+public class Game implements Serializable{
   enum GameState{
     Running, Dead
   }
@@ -34,12 +34,18 @@ public class Game extends Applet implements Runnable, KeyListener, Serializable{
   private Player player;//=new Player();
   private Monster[] monster;
   private DangerousMonster[] dangerousMonster;
-  private Map;
+  private Map map;
   public Game(){
     Game myGame=null;
-    if (loadGame()!=null) myGame=loadGame();
+    if (loadGame()!=null) {
+      myGame=loadGame();
+      this.player=myGame.player;
+      this.monster=myGame.monster;
+      this.dangerousMonster=myGame.dangerousMonster;
+      this.map=myGame.map;
+    }
     else {
-
+      //new game
     }
   }
 
@@ -71,5 +77,8 @@ public class Game extends Applet implements Runnable, KeyListener, Serializable{
     }catch (IOException e){
       System.out.println("Error Write file");
     }
+  }
+  public static void main(String[] args){
+	  
   }
 }

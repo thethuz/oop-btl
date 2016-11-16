@@ -1,10 +1,11 @@
 package game.player;
 
 //import data.player.*;
-import game.player.Controller;
+//import game.player.Controller;
 //import graphic.player.*;
 import game.Character;
-//import game.map.Map;
+import game.map.Map;
+import game.map.MapItem;
 import java.io.Serializable;
 
 public class Player extends Character implements Serializable{
@@ -12,32 +13,33 @@ public class Player extends Character implements Serializable{
   private int targetY=0;
   public Player(){
     setName("Player");
-    loadPlayer();
+    //loadPlayer();
   }
-  Controller playerController=new Controller();
+  //Controller playerController=new Controller();
   //Hàm di chuyển bằng các phím mũi tên
+  
   public void move(String control, Map map){
     if (control=="up") {
-      if (map.getMapItem(this.getPositionX(),this.getPositionY()++).isMoveable())
-      setPositionY(this.getPositionY()++);
+      if (map.getMapItem(this.getPositionX(),this.getPositionY()+1).isMoveable())
+      setPositionY(this.getPositionY()+1 );
       targetX=0;
       targetY=1;
     }
     if (control=="down") {
-      if (Game.map.getMapItem(this.getPositionX(),this.getPositionY()--).isMoveable())
-      setPositionY(this.getPositionY()--);
+      if (map.getMapItem(this.getPositionX(),this.getPositionY()-1).isMoveable())
+      setPositionY(this.getPositionY()-1);
       targetX=0;
       targetY=-1;
     }
     if (control=="right") {
-      if (Game.map.getMapItem(this.getPositionX()++,this.getPositionY()).isMoveable())
-      setPositionX(this.getPositionX()++);
+      if (map.getMapItem(this.getPositionX()+1,this.getPositionY()).isMoveable())
+      setPositionX(this.getPositionX()+1);
       targetX=1;
       targetY=0;
     }
     if (control=="left") {
-      if (Game.map.getMapItem(this.getPositionX()--,this.getPositionY()).isMoveable())
-      setPositionX(this.getPositionX()--);
+      if (map.getMapItem(this.getPositionX()-1,this.getPositionY()).isMoveable())
+      setPositionX(this.getPositionX()-1);
       targetX=-1;
       targetY=0;
     }
@@ -46,12 +48,12 @@ public class Player extends Character implements Serializable{
   //Tấn công
   public void attack(){
     //B1: Kiểm tra ô target xem có quái ở đó không?
-    if(Game.map.getMapItem( this.getPositionX()+targetX, this.getPositionY()+targetY ).getMonsterLocate()!=null){//Nếu ô mục tiêu có quái
-      Game.map.getMapItem (this.getPositionX()+targetX ,this.getPositionY()+targetY).getMonsterLocate().defend(this.damage);
+    if(2>=1){//Game.map.getMapItem( this.getPositionX()+targetX, this.getPositionY()+targetY ).getMonsterLocate()!=null){//Nếu ô mục tiêu có quái
+      //Game.map.getMapItem (this.getPositionX()+targetX ,this.getPositionY()+targetY).getMonsterLocate().defend(this.damage);
       //Animation
       //sleep 100/attackSpeed
     }else{
-
+    	//
     }
     //Ô target là ô gần người chơi nhất theo phím di chuyển được ấn cuối cùng.
     //B2: Nếu có quái, gọi đến hàm sát thương của quái
@@ -60,19 +62,11 @@ public class Player extends Character implements Serializable{
     //animation attack
   }
   //Chết
-  public void dead(){
-    if(health==0){
-      //animation Dead
-      reborn();
-    }
-  }
   //Hồi sinh
   public void reborn(){
-    if (health==0){
-
-    }
+	  setHealth(getMaxHealth());
   }
-  //Sử dụng kỹ năng
+    //Sử dụng kỹ năng
   Skill skill[]=new Skill[4];
   public void useSkill(int skillNumber){
 

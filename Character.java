@@ -2,6 +2,10 @@ package game;
 import game.map.Map;
 public abstract class Character{
   //máu
+	private int maxHealth;
+	public int getMaxHealth(){
+		return maxHealth;
+	}
   private int health;
   //damage,def
   private int damage,defense;
@@ -29,7 +33,11 @@ public abstract class Character{
     health=health-0;
 
   }
-  public abstract void dead();
+  public void dead(){
+	  if(health==0){
+		  //animation dead
+	  }
+  }
   public abstract void reborn();
   //public abstract void defense(Character enemy);
   // public void defense(Character enemy){

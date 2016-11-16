@@ -1,56 +1,25 @@
 package game.map;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+//import java.io.BufferedReader;
+import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.io.Serializable;
+import java.io.FileInputStream;
+
 import game.monster.Monster;
 import game.player.Player;
-import java.io.Serializable;
 
 public class Map implements Serializable{
   private String name;
   private int sizeX=100,sizeY=100;
   private MapItem[][] map;
 
-  // public Map(String name){
-  //   setName(name);
-  //   //read Local File
-  //   MapLoader mapLoader=new MapLoader(name);
-  // }
+  public Map(){
+  }
   public void setMapItem(int row, int column, MapItem item){
 
   }
-  public void loadMap(String filename) throws IOException{
-    List<String> lines=new ArrayList<String>();
-    int width = 0;
-    int height = 0;
-    BufferedReader reader=new BufferedReader(new FileReader(filename));
-    while(true){
-      String line = reader.readLine();
-      if (line == null){
-        reader.close();
-        break;
-      }
-      if (!line.startsWith("!")){
-        lines.add(line);
-        width = Math.max(width, line.length());
-      }
-    }
-    height=lines.size();
-    /*
-    for (int j = 0; j < 12; j++) {
-			String line = (String) lines.get(j);
-			for (int i = 0; i < width; i++) {
-				// System.out.println(i + "is i ");
-				if (i < line.length()) {
-					char ch = line.charAt(i);
-					Tile t = new Tile(i, j, Character.getNumericValue(ch));
-					tilearray.add(t);
-				}
-			}
-		}
-    */
-  }
+
   public MapItem getMapItem(int row, int column){
     return map[row][column];
   }
@@ -79,53 +48,3 @@ public class Map implements Serializable{
 *
 *
 **/
-class MapItem implements Serializable{
-  Player playerLocate=null;
-  Monster monsterLocate=null;
-  private boolean playerLocateStt;
-  private boolean monsterLocateStt;
-  private boolean standable;
-  public void setStandable(boolean can){
-    standable=can;
-  }
-  function boolean getStandable(){
-    return standable;
-  }
-  public boolean isMoveable(int positionX, int positionY){
-    if(!playerLocate && !monsterLocate && standable) return true;
-    return false;
-  }
-  public void setPlayerLocateStt(boolean stt){
-    playerLocate=stt;
-  }
-  public void setMonsterLocateStt(boolean stt){
-    monsterLocate=stt;
-  }
-  public boolean getPlayerLocateStt(){
-    return playerLocateStt;
-  }
-  public boolean getMonsterLocateStt(){
-    return monsterLocateStt;
-  }
-
-  public Player getPlayerLocate(){
-    if(getMonsterLocateStt()){
-      return playerLocate;
-    }else
-      return null;
-  }
-  public Monster getMonsterLocate(){
-    if(getMonsterLocateStt()){
-      return monsterLocate;
-    }else
-      return null;
-  }
-  public void setMonsterLocate(Monster x){
-    monsterLocate=x;
-    setMonsterLocateStt(true);
-  }
-  public void setPlayerLocate(Player x){
-    playerLocate=x;
-    setMonsterLocateStt(true);
-  }
-}

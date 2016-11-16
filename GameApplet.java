@@ -64,12 +64,14 @@ public void destroy(){
 @Override
 public void run(){
   if (state == GameState.Running) {
+    Game mygame=null;
     while (true) {
       /*
       *DO SOMETHING THERE
       */
 
     }
+    if(mygame!=null) mygame.saveGame(Game);
   }
 }
 
