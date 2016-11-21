@@ -3,7 +3,7 @@ import java.io.*;
 import java.awt.image.*;
 import javax.imageio.*;
 
-public class Human implements Common {
+public class Human extends Character implements Common {
     private static final int SPEED = 4;
     public static  final double PROB_MOVE = 0.02;
 

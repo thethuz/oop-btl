@@ -37,22 +37,7 @@ public abstract class Character implements Common {
     // reference to Map
     private Map map;
 
-    public void draw(Graphics g, int offsetX, int offsetY) {
-        int cx = (id % 8) * (CS * 2);
-        int cy = (id / 8) * (CS * 4);
-        // switch image based on animation counter
-        g.drawImage(image,
-                    px - offsetX,
-                    py - offsetY,
-                    px - offsetX + CS,
-                    py - offsetY + CS,
-                    cx + count * CS,
-                    cy + direction * CS,
-                    cx + CS + count * CS,
-                    cy + direction * CS + CS,
-                    null);
-    }
-
+    public abstract void draw(Graphics g, int offsetX, int offsetY) ;
     public abstract boolean move();
 
     public abstract boolean moveLeft();
@@ -111,7 +96,7 @@ public abstract class Character implements Common {
     public int getMoveType() {
         return moveType;
     }
-    
+
     public void setHealth(int health){
       this.health=health;
     }
@@ -136,7 +121,7 @@ public abstract class Character implements Common {
       return defence;
     }
 
-    public void loadImage(String filename) {
+    private void loadImage(String filename) {
         try {
             image = ImageIO.read(getClass().getResource(filename));
         } catch (IOException e) {
@@ -145,7 +130,7 @@ public abstract class Character implements Common {
     }
 
     // Animation Class
-    public class AnimationThread extends Thread {
+    private class AnimationThread extends Thread {
         public void run() {
             while (true) {
                 if (count == 0) {

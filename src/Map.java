@@ -21,6 +21,8 @@ public class Map implements Common {
 
     // humans in this map
     private Vector<Human> humans = new Vector<Human>();
+    //monster in this map
+    private Vector<Monster> monsters = new Vector<Monster>();
     // events in this map
     private Vector<Event> events = new Vector<Event>();
 
@@ -88,12 +90,28 @@ public class Map implements Common {
             Human c = humans.get(i);
             c.draw(g, offsetX, offsetY);
         }
+        for (int i = 0; i < monsters.size(); i++) {
+            Monster c = monsters.get(i);
+            c.draw(g, offsetX+1, offsetY+1);
+        }
     }
 
     public boolean isHit(int x, int y) {
+      //24678910
+      //4 flower
+      //6 macma
+      //7 tree
+      //8 brown mountain
+      //9 grey mountain
+      //0 road
         if (map[y][x] == 1 ||    // wall
             map[y][x] == 2 ||    // throan
-            map[y][x] == 5) {    // sea
+            map[y][x] == 5 ||    // sea
+            map[y][x] == 6 || //macma
+            map[y][x] == 7 || //tree
+            map[y][x] == 8 || //brown mountain
+            map[y][x] == 9  //road
+            ) {
             return true;
         }
 
@@ -105,6 +123,13 @@ public class Map implements Common {
             }
         }
 
+        // Are there any monster?
+        for (int i = 0; i < monsters.size(); i++) {
+            Monster m = monsters.get(i);
+            if (m.getX() == x && m.getY() == y) {
+                return true;
+            }
+        }
         // Are there events?
         for (int i = 0; i < events.size(); i++) {
             Event event = events.get(i);
@@ -123,6 +148,13 @@ public class Map implements Common {
     public void removeHuman(Human c) {
         humans.remove(c);
     }
+    public void addMonster(Monster c) {
+        monsters.add(c);
+    }
+
+    public void removeMonster(Monster c) {
+        monsters.remove(c);
+    }
 
     // Kiểm tra Human có tồn tại ở vị trí x,y không ?
     public Human checkHuman(int x, int y) {
@@ -130,6 +162,17 @@ public class Map implements Common {
             Human c = humans.get(i);
             if (c.getX() == x && c.getY() == y) {
                 return c;
+            }
+        }
+        return null;
+    }
+
+    //Kiểm tra monster có ở vị trí x,y k?
+    public Monster checkMonster(int x, int y) {
+        for (int i = 0; i < monsters.size(); i++) {
+            Monster m = monsters.get(i);
+            if (m.getX() == x && m.getY() == y) {
+                return m;
             }
         }
         return null;
@@ -176,6 +219,9 @@ public class Map implements Common {
 
     public Vector<Human> getHumans() {
         return humans;
+    }
+    public Vector<Monster> getMonsters() {
+        return monsters;
     }
 
     public String getBgmName() {

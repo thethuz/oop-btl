@@ -42,7 +42,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
     private WaveEngine waveEngine = new WaveEngine();
 
     // BGM
-    // from TAM Music Factory http://www.tam-music.com/
+    
     private static final String[] bgmNames = {"castle", "field"};
     // Sound Clip
     private static final String[] soundNames = {"treasure", "door", "step"};
@@ -72,19 +72,24 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         mapNo = 0;  // initial map
 
         // create human
+        System.out.println("Khoi tao");
         hero = new Human(6, 6, 0, DOWN, 0, maps[mapNo]);
+        Human hero1 = new Human(6, 7, 0, UP, 0, maps[mapNo]);
         monster = new Monster (6,7, 0, UP, 0, maps[mapNo]);
         // add humans to the map
         maps[mapNo].addHuman(hero);
+        //maps[mapNo].addHuman(hero1);
+        maps[mapNo].addMonster(monster);
         //maps
         // create message window
         messageWindow = new MessageWindow(WND_RECT);
-
+        System.out.println(hero);
+        System.out.println(monster);
         // load BGM and sound clips
         loadSound();
 
         midiEngine.play(maps[mapNo].getBgmName());
-
+        System.out.println("start");
         // start game loop
         gameLoop = new Thread(this);
         gameLoop.start();
@@ -129,9 +134,10 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         if (!messageWindow.isVisible()) {
             heroMove();
             humanMove();
+            monsterMove();
         }
     }
-
+    //Render đồ họa trò chơi
     private void gameRender() {
         if (dbImage == null) {
             // buffer image
@@ -146,7 +152,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
         dbg.setColor(Color.WHITE);
         dbg.fillRect(0, 0, WIDTH, HEIGHT);
-
+        //
         // calculate offset so that the hero is in the center of a screen.
         int offsetX = hero.getPX() - MainPanel.WIDTH / 2;
         // do not scroll at the edge of the map
@@ -170,7 +176,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         // draw message window
         messageWindow.draw(dbg);
 
-        // display debug information
+        // thông tin góc trên bên trái
         if (DEBUG_MODE) {
             Font font = new Font("SansSerif", Font.BOLD, 16);
             dbg.setFont(font);
@@ -178,7 +184,8 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             dbg.drawString(maps[mapNo].getMapName() + " (" + maps[mapNo].getCol() + "," + maps[mapNo].getRow() + ")", 4, 16);
             dbg.drawString("(" + hero.getX() + "," + hero.getY() + ") ", 4, 32);
             dbg.drawString("(" + hero.getPX() + "," + hero.getPY() + ")", 4, 48);
-            dbg.drawString(maps[mapNo].getBgmName(), 4, 64);
+            dbg.drawString(hero.getHealth() + "/ 100", 4, 64);
+            dbg.drawString(maps[mapNo].getBgmName(), 4, 80);
         }
     }
 
@@ -285,7 +292,23 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             }
         }
     }
-
+    private void monsterMove() {
+        if (monster.isMoving()) {
+            if (monster.move()) {
+                Event event = maps[mapNo].checkEvent(monster.getX(), monster.getY());
+                if (event instanceof MoveEvent) {
+                    waveEngine.play("step");
+                    // move to another map
+                    MoveEvent m = (MoveEvent)event;
+                    maps[mapNo].removeMonster(monster);
+                    mapNo = m.destMapNo;
+                    monster = new Monster(m.destX, m.destY, 0, DOWN, 0, maps[mapNo]);
+                    maps[mapNo].addMonster(monster);
+                    midiEngine.play(maps[mapNo].getBgmName());
+                }
+            }
+        }
+    }
     private void humanMove() {
         // get humans in the map
         Vector<Human> humans = maps[mapNo].getHumans();
