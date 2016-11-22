@@ -24,7 +24,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
     // our hero's enemy!
 
     private Monster monster;
-
+    private Monster[] monsters=new Monster[100];
     // action keys
     private ActionKey leftKey;
     private ActionKey rightKey;
@@ -42,7 +42,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
     private WaveEngine waveEngine = new WaveEngine();
 
     // BGM
-    
+
     private static final String[] bgmNames = {"castle", "field"};
     // Sound Clip
     private static final String[] soundNames = {"treasure", "door", "step"};
@@ -75,11 +75,17 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         System.out.println("Khoi tao");
         hero = new Human(6, 6, 0, DOWN, 0, maps[mapNo]);
         Human hero1 = new Human(6, 7, 0, UP, 0, maps[mapNo]);
-        monster = new Monster (6,7, 0, UP, 0, maps[mapNo]);
+        monster = new Monster (6,7, 0, DOWN, 0, maps[mapNo]);
+        for(int j=0;j<10;j++)
+          for(int i=0;i<10;i++){
+          monsters[i]=new Monster(6+j,7+i,0,DOWN,1, maps[1]);
+          maps[1].addMonster(monsters[i]);
+        }
         // add humans to the map
         maps[mapNo].addHuman(hero);
         //maps[mapNo].addHuman(hero1);
         maps[mapNo].addMonster(monster);
+        //maps[1].addMonster(monsters);
         //maps
         // create message window
         messageWindow = new MessageWindow(WND_RECT);
@@ -293,21 +299,20 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         }
     }
     private void monsterMove() {
-        if (monster.isMoving()) {
-            if (monster.move()) {
-                Event event = maps[mapNo].checkEvent(monster.getX(), monster.getY());
-                if (event instanceof MoveEvent) {
-                    waveEngine.play("step");
-                    // move to another map
-                    MoveEvent m = (MoveEvent)event;
-                    maps[mapNo].removeMonster(monster);
-                    mapNo = m.destMapNo;
-                    monster = new Monster(m.destX, m.destY, 0, DOWN, 0, maps[mapNo]);
-                    maps[mapNo].addMonster(monster);
-                    midiEngine.play(maps[mapNo].getBgmName());
-                }
-            }
-        }
+      // get monsters in the map
+      Vector<Monster> monsters = maps[mapNo].getMonsters();
+      // move each monster
+      for (int i = 0; i < monsters.size(); i++) {
+          Monster c = monsters.get(i);
+          if (c.getMoveType() == 1) {
+              if (c.isMoving()) {
+                  c.move();
+              } else if (rand.nextDouble() < Monster.PROB_MOVE) {
+                  c.setDirection(rand.nextInt(4));
+                  c.setMoving(true);
+              }
+          }
+      }
     }
     private void humanMove() {
         // get humans in the map

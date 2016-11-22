@@ -32,7 +32,7 @@ public class Monster extends Character implements Common{
 
   // reference to Map
   private Map map;
-
+  //Tọa độ x, tọa độ y, vị trí trong image/monster.gif, hướng, kiểu di chuyển(0 đứng yên, 1 tự động), map
   public Monster(int x, int y, int id, int direction, int moveType, Map map) {
       // init monster
       this.x = x;
@@ -55,22 +55,121 @@ public class Monster extends Character implements Common{
       threadAnime.start();
   }
   public boolean move(){
+    switch (direction) {
+    case LEFT:
+        if (moveLeft()) {
+            // return true if pixel-based scrolling is completed.
+            return true;
+        }
+        break;
+    case RIGHT:
+        if (moveRight()) {
+            return true;
+        }
+        break;
+    case UP:
+        if (moveUp()) {
+            return true;
+        }
+        break;
+    case DOWN:
+        if (moveDown()) {
+            return true;
+        }
+        break;
+    }
     return false;
   }
 
   public boolean moveLeft(){
+    int nextX = x - 1;
+    int nextY = y;
+    if (nextX < 0) nextX = 0;
+    if (!map.isHit(nextX, nextY)) {
+        px -= Monster.SPEED;
+        if (px < 0) px = 0;
+        moveLength += Monster.SPEED;
+        if (moveLength >= CS) {
+            // pixel-based scrolling is completed
+            // hero moves to left tile
+            x--;
+            px = x * CS;
+            isMoving = false;
+            return true;
+        }
+    } else {
+        isMoving = false;
+        px = x * CS;
+        py = y * CS;
+    }
     return false;
   }
 
   public boolean moveRight(){
+    int nextX = x + 1;
+    int nextY = y;
+    if (nextX > map.getCol() - 1) nextX = map.getCol() - 1;
+    if (!map.isHit(nextX, nextY)) {
+        px += Monster.SPEED;
+        if (px > map.getWidth() - CS)
+            px = map.getWidth() - CS;
+        moveLength += Monster.SPEED;
+        if (moveLength >= CS) {
+            x++;
+            px = x * CS;
+            isMoving = false;
+            return true;
+        }
+    } else {
+        isMoving = false;
+        px = x * CS;
+        py = y * CS;
+    }
     return false;
   }
 
   public boolean moveUp(){
+    int nextX = x;
+    int nextY = y - 1;
+    if (nextY < 0) nextY = 0;
+    if (!map.isHit(nextX, nextY)) {
+        py -= Monster.SPEED;
+        if (py < 0) py = 0;
+        moveLength += Monster.SPEED;
+        if (moveLength >= CS) {
+            y--;
+            py = y * CS;
+            isMoving = false;
+            return true;
+        }
+    } else {
+        isMoving = false;
+        px = x * CS;
+        py = y * CS;
+    }
     return false;
   }
 
   public boolean moveDown(){
+    int nextX = x;
+    int nextY = y + 1;
+    if (nextY > map.getRow() - 1) nextY = map.getRow() - 1;
+    if (!map.isHit(nextX, nextY)) {
+        py += Monster.SPEED;
+        if (py > map.getHeight() - CS)
+            py = map.getHeight() - CS;
+        moveLength += Monster.SPEED;
+        if (moveLength >= CS) {
+            y++;
+            py = y * CS;
+            isMoving = false;
+            return true;
+        }
+    } else {
+        isMoving = false;
+        px = x * CS;
+        py = y * CS;
+    }
     return false;
   }
 public boolean attack(){
