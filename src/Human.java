@@ -9,17 +9,17 @@ public class Human extends Character implements Common {
 
     private static BufferedImage image;
     private int id;
-
+    private int damage;
     // human's position (unit: tile)
     private int x, y;
     // human's position (unit: pixel)
     private int px, py;
-
+    //private int health;
     // human's direction (LEFT, RIGHT, UP or DOWN)
     private int direction;
     // human's animation counter
     private int count;
-
+    private int health=100;
     //
 
     private boolean isMoving;
@@ -240,9 +240,39 @@ public class Human extends Character implements Common {
     }
 
     public boolean attack(){
+      int nextX = 0;
+      int nextY = 0;
+      switch (direction) {
+        case LEFT:
+            nextX = x - 1;
+            nextY = y;
+            break;
+        case RIGHT:
+            nextX = x + 1;
+            nextY = y;
+            break;
+        case UP:
+            nextX = x;
+            nextY = y - 1;
+            break;
+        case DOWN:
+            nextX = x;
+            nextY = y + 1;
+            break;
+      }
+      //is there any monster??
+      Monster m = map.checkMonster(nextX, nextY);
+      if (m != null){
+        m.setHealth(m.getHealth()-damage);
+      }
       return false;
     }
-
+    public int getHealth(){
+      return health;
+    }
+    public void setHealth(int health){
+      this.health=health;
+    }
     public TreasureEvent search() {
         Event event = map.checkEvent(x, y);
         if (event instanceof TreasureEvent) {
@@ -294,7 +324,12 @@ public class Human extends Character implements Common {
     public int getPY() {
         return py;
     }
-
+    public int getDamage(){
+      return damage;
+    }
+    public void setDamage(int damage){
+      this.damage=damage;
+    }
     public void setDirection(int dir) {
         direction = dir;
     }

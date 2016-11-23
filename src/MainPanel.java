@@ -24,13 +24,14 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
     // our hero's enemy!
 
     private Monster monster;
-    private Monster[] monsters=new Monster[100];
+    private Monster[] monsters=new Monster[10];
     // action keys
     private ActionKey leftKey;
     private ActionKey rightKey;
     private ActionKey upKey;
     private ActionKey downKey;
     private ActionKey spaceKey;
+    private ActionKey attackKey;
 
     private Thread gameLoop;
     private Random rand = new Random();
@@ -62,6 +63,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         rightKey = new ActionKey();
         upKey = new ActionKey();
         downKey = new ActionKey();
+        attackKey = new ActionKey();
         spaceKey = new ActionKey(ActionKey.DETECT_INITIAL_PRESS_ONLY);
 
         // create map
@@ -74,11 +76,11 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         // create human
         System.out.println("Khoi tao");
         hero = new Human(6, 6, 0, DOWN, 0, maps[mapNo]);
-        Human hero1 = new Human(6, 7, 0, UP, 0, maps[mapNo]);
-        monster = new Monster (6,7, 0, DOWN, 0, maps[mapNo]);
-        for(int j=0;j<10;j++)
+        //Human hero1 = new Human(6, 7, 0, UP, 0, maps[mapNo]);
+        monster = new Monster (6,7, 0, DOWN, 1, maps[mapNo]);
+
           for(int i=0;i<10;i++){
-          monsters[i]=new Monster(6+j,7+i,0,DOWN,1, maps[1]);
+          monsters[i]=new Monster(6,9+i,0,DOWN,1, maps[1]);
           maps[1].addMonster(monsters[i]);
         }
         // add humans to the map
@@ -141,6 +143,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             heroMove();
             humanMove();
             monsterMove();
+            monsterAttack();
         }
     }
     //Render đồ họa trò chơi
@@ -190,8 +193,10 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             dbg.drawString(maps[mapNo].getMapName() + " (" + maps[mapNo].getCol() + "," + maps[mapNo].getRow() + ")", 4, 16);
             dbg.drawString("(" + hero.getX() + "," + hero.getY() + ") ", 4, 32);
             dbg.drawString("(" + hero.getPX() + "," + hero.getPY() + ")", 4, 48);
-            dbg.drawString(hero.getHealth() + "/ 100", 4, 64);
-            dbg.drawString(maps[mapNo].getBgmName(), 4, 80);
+            dbg.drawString("Health: "+ hero.getHealth() + "/ 100", 4, 64);
+            dbg.drawString("Damage: "+ hero.getDamage() , 4, 80);
+            dbg.drawString("Defence: "+ hero.getDefence() , 4, 96);
+            dbg.drawString(maps[mapNo].getBgmName(), 4, 112);
         }
     }
 
@@ -233,6 +238,9 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                 hero.setDirection(DOWN);
                 hero.setMoving(true);
             }
+        }
+        if (attackKey.isPressed()){
+          //hero attack
         }
 
         if (spaceKey.isPressed()) {
@@ -304,9 +312,28 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
       // move each monster
       for (int i = 0; i < monsters.size(); i++) {
           Monster c = monsters.get(i);
+
           if (c.getMoveType() == 1) {
               if (c.isMoving()) {
+                  System.out.println("monster "+i+" is moving"+c.getDirection());
                   c.move();
+              } else if (rand.nextDouble() < Monster.PROB_MOVE) {
+                  c.setDirection(rand.nextInt(4));
+                  c.setMoving(true);
+              }
+          }
+      }
+    }
+    private void monsterAttack() {
+      // get monsters in the map
+      Vector<Monster> monsters = maps[mapNo].getMonsters();
+      // move each monster
+      for (int i = 0; i < monsters.size(); i++) {
+          Monster c = monsters.get(i);
+          if (c.getAttackType() == 1) {
+              if (c.isAttacking()) {
+        //          System.out.println("Monster "+i+" is attacking"+c.getDirection());
+                  c.attack();
               } else if (rand.nextDouble() < Monster.PROB_MOVE) {
                   c.setDirection(rand.nextInt(4));
                   c.setMoving(true);
@@ -337,6 +364,10 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         if (keyCode == KeyEvent.VK_LEFT) {
             leftKey.press();
         }
+        if (keyCode == KeyEvent.VK_A) {
+            System.out.println("A");
+            attackKey.press();
+        }
         if (keyCode == KeyEvent.VK_RIGHT) {
             rightKey.press();
         }
@@ -356,6 +387,9 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
         if (keyCode == KeyEvent.VK_LEFT) {
             leftKey.release();
+        }
+        if (keyCode == KeyEvent.VK_A) {
+            attackKey.release();
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
             rightKey.release();

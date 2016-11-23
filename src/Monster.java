@@ -9,7 +9,7 @@ public class Monster extends Character implements Common{
   private static BufferedImage image;
   private int id;
   private int health;
-  private int damage;
+  private int damage=1;
   private int defence;
   // monster's position (unit: tile)
   private int x, y;
@@ -23,10 +23,12 @@ public class Monster extends Character implements Common{
 
   private boolean isMoving;
   private int moveLength;
+  private boolean isAttacking=false;
 
   private int moveType;
   private String message;
 
+  private int attackType=1;
   // thread for monster animation
   private Thread threadAnime;
 
@@ -200,6 +202,36 @@ public boolean attack(){
     }
     return false;
   }
+  public boolean isAttacking(){
+    int nextX=0;
+    int nextY=0;
+    switch (direction) {
+      case LEFT:
+          nextX = x - 1;
+          nextY = y;
+          break;
+      case RIGHT:
+          nextX = x + 1;
+          nextY = y;
+          break;
+      case UP:
+          nextX = x;
+          nextY = y - 1;
+          break;
+      case DOWN:
+          nextX = x;
+          nextY = y + 1;
+          break;
+    }
+    Human h=map.checkHuman(nextX, nextY);
+
+    if(h!=null) {
+      isAttacking=true;
+      h.setHealth(h.getHealth()-damage);
+    }
+    else isAttacking=false;
+    return isAttacking;
+  }
   public void draw(Graphics g, int offsetX, int offsetY) {
       int cx = (id % 8) * (CS * 2);
       int cy = (id / 8) * (CS * 4);
@@ -222,7 +254,9 @@ public boolean attack(){
           e.printStackTrace();
       }
   }
-
+  public int getAttackType(){
+    return attackType;
+  }
   private class AnimationThread extends Thread {
       public void run() {
           while (true) {
@@ -257,6 +291,9 @@ public boolean attack(){
 
   public void setDirection(int dir) {
       direction = dir;
+  }
+  public int getDirection() {
+      return direction;
   }
 
   public boolean isMoving() {
