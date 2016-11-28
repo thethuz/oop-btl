@@ -6,7 +6,6 @@ import javax.swing.*;
 class MainPanel extends JPanel implements KeyListener, Runnable, Common {
     public static final int WIDTH = 640;
     public static final int HEIGHT = 640;
-
     // 20ms/frame = 50fps
     private static final int PERIOD = 20;
 
@@ -77,7 +76,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         System.out.println("Khoi tao");
         hero = new Human(6, 6, 0, DOWN, 0, maps[mapNo]);
         //Human hero1 = new Human(6, 7, 0, UP, 0, maps[mapNo]);
-        monster = new Monster (6,7, 0, DOWN, 1, maps[mapNo]);
+        monster = new Monster (6,7, 0, DOWN, 0, maps[mapNo]);
 
           for(int i=0;i<10;i++){
           monsters[i]=new Monster(6,9+i,0,DOWN,1, maps[1]);
@@ -100,6 +99,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         System.out.println("start");
         // start game loop
         gameLoop = new Thread(this);
+
         gameLoop.start();
     }
 
@@ -140,6 +140,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
     private void gameUpdate() {
         if (!messageWindow.isVisible()) {
+
             heroMove();
             humanMove();
             monsterMove();
@@ -239,7 +240,15 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                 hero.setMoving(true);
             }
         }
+        /**
+        *
+        *
+        *
+        **/
         if (attackKey.isPressed()){
+          hero.attack();
+
+          //dThread.sleep(5);
           //hero attack
         }
 
@@ -306,6 +315,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             }
         }
     }
+
     private void monsterMove() {
       // get monsters in the map
       Vector<Monster> monsters = maps[mapNo].getMonsters();
@@ -315,7 +325,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
           if (c.getMoveType() == 1) {
               if (c.isMoving()) {
-                  System.out.println("monster "+i+" is moving"+c.getDirection());
+                  //System.out.println("monster "+i+" is moving"+c.getDirection());
                   c.move();
               } else if (rand.nextDouble() < Monster.PROB_MOVE) {
                   c.setDirection(rand.nextInt(4));
@@ -324,6 +334,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
           }
       }
     }
+
     private void monsterAttack() {
       // get monsters in the map
       Vector<Monster> monsters = maps[mapNo].getMonsters();
@@ -331,9 +342,9 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
       for (int i = 0; i < monsters.size(); i++) {
           Monster c = monsters.get(i);
           if (c.getAttackType() == 1) {
-              if (c.isAttacking()) {
-        //          System.out.println("Monster "+i+" is attacking"+c.getDirection());
-                  c.attack();
+              if (c.attack()) {
+                  System.out.println("Monster "+i+" is attacking"+c.getDirection());
+
               } else if (rand.nextDouble() < Monster.PROB_MOVE) {
                   c.setDirection(rand.nextInt(4));
                   c.setMoving(true);
@@ -341,6 +352,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
           }
       }
     }
+
     private void humanMove() {
         // get humans in the map
         Vector<Human> humans = maps[mapNo].getHumans();
@@ -367,6 +379,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         if (keyCode == KeyEvent.VK_A) {
             System.out.println("A");
             attackKey.press();
+
         }
         if (keyCode == KeyEvent.VK_RIGHT) {
             rightKey.press();

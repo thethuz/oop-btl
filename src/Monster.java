@@ -8,7 +8,7 @@ public class Monster extends Character implements Common{
 
   private static BufferedImage image;
   private int id;
-  private int health;
+  private int health=100;
   private int damage=1;
   private int defence;
   // monster's position (unit: tile)
@@ -24,14 +24,14 @@ public class Monster extends Character implements Common{
   private boolean isMoving;
   private int moveLength;
   private boolean isAttacking=false;
-
+  private boolean isAttackable=true;
   private int moveType;
   private String message;
 
   private int attackType=1;
   // thread for monster animation
-  private Thread threadAnime;
-
+  private Thread threadPlayer;
+  //private Thread threadAttack;
   // reference to Map
   private Map map;
   //Tọa độ x, tọa độ y, vị trí trong image/monster.gif, hướng, kiểu di chuyển(0 đứng yên, 1 tự động), map
@@ -53,9 +53,12 @@ public class Monster extends Character implements Common{
       }
 
       // run thread
-      threadAnime = new Thread(new AnimationThread());
-      threadAnime.start();
+      // threadAttack = new Thread(new AttackThread());
+      // threadAttack.start();
+      threadPlayer = new Thread(new PlayerThread());
+      threadPlayer.start();
   }
+
   public boolean move(){
     switch (direction) {
     case LEFT:
@@ -174,64 +177,41 @@ public class Monster extends Character implements Common{
     }
     return false;
   }
-public boolean attack(){
-    int nextX=0;
-    int nextY=0;
-    switch (direction) {
-    case LEFT:
-      nextX = x-1;
-      nextY = y;
-      break;
-    case RIGHT:
-      nextX = x+1;
-      nextY = y;
-      break;
-    case UP:
-      nextX = x;
-      nextY = y-1;
-      break;
-    case DOWN:
-      nextX = x;
-      nextY = y+1;
-      break;
-    }
-    //có phải human k?
-    Human c = map.checkHuman(nextX, nextY);
-    if (c!=null){
+
+  public boolean attack(){
+    if(isAttackable){
+      int nextX=0;
+      int nextY=0;
+      switch (direction) {
+      case LEFT:
+        nextX = x-1;
+        nextY = y;
+        break;
+      case RIGHT:
+        nextX = x+1;
+        nextY = y;
+        break;
+      case UP:
+        nextX = x;
+        nextY = y-1;
+        break;
+      case DOWN:
+        nextX = x;
+        nextY = y+1;
+        break;
+      }
+      //có phải human k?
+      Human h = map.checkHuman(nextX, nextY);
+      if (h!=null){
+        h.setHealth(h.getHealth()-damage);
+        isAttackable=false;
+        return true;
+      }
 
     }
     return false;
   }
-  public boolean isAttacking(){
-    int nextX=0;
-    int nextY=0;
-    switch (direction) {
-      case LEFT:
-          nextX = x - 1;
-          nextY = y;
-          break;
-      case RIGHT:
-          nextX = x + 1;
-          nextY = y;
-          break;
-      case UP:
-          nextX = x;
-          nextY = y - 1;
-          break;
-      case DOWN:
-          nextX = x;
-          nextY = y + 1;
-          break;
-    }
-    Human h=map.checkHuman(nextX, nextY);
 
-    if(h!=null) {
-      isAttacking=true;
-      h.setHealth(h.getHealth()-damage);
-    }
-    else isAttacking=false;
-    return isAttacking;
-  }
   public void draw(Graphics g, int offsetX, int offsetY) {
       int cx = (id % 8) * (CS * 2);
       int cy = (id / 8) * (CS * 4);
@@ -257,7 +237,24 @@ public boolean attack(){
   public int getAttackType(){
     return attackType;
   }
-  private class AnimationThread extends Thread {
+  private class AttackThread extends Thread{
+    public void run(){
+      while (true){
+        if(isAttackable==false)
+        {
+          // isAttackable=false;
+          try{
+            Thread.sleep(0);
+          }catch (InterruptedException e) {
+              e.printStackTrace();
+          }
+          isAttackable=true;
+        }
+
+      }
+    }
+  }
+  private class PlayerThread extends Thread {
       public void run() {
           while (true) {
               if (count == 0) {
@@ -269,6 +266,16 @@ public boolean attack(){
                   Thread.sleep(300);
               } catch (InterruptedException e) {
                   e.printStackTrace();
+              }
+              if(isAttackable==false)
+              {
+                // isAttackable=false;
+                try{
+                  Thread.sleep(500);
+                }catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                isAttackable=true;
               }
           }
       }
@@ -318,7 +325,13 @@ public boolean attack(){
   }
 
   public void setHealth(int health){
-    this.health=health;
+    System.out.println(health);
+    if(health>0){
+      this.health=health;
+    } else dead();
+  }
+  public void dead(){
+    map.removeMonster(this);
   }
 
   public int getHealth(){

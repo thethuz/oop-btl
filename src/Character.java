@@ -52,6 +52,9 @@ public abstract class Character implements Common {
 
     public abstract boolean attack();
 
+    //
+    public abstract void dead();
+
     //public abstract TreasureEvent search();
 
     //public abstract DoorEvent open();

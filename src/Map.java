@@ -91,8 +91,8 @@ public class Map implements Common {
             c.draw(g, offsetX, offsetY);
         }
         for (int i = 0; i < monsters.size(); i++) {
-            Monster c = monsters.get(i);
-            c.draw(g, offsetX+1, offsetY+1);
+            Monster m = monsters.get(i);
+            m.draw(g, offsetX, offsetY);
         }
     }
 

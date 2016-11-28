@@ -9,7 +9,9 @@ public class Human extends Character implements Common {
 
     private static BufferedImage image;
     private int id;
-    private int damage;
+    private int [] damageLvl={1,2,3,4,5};
+    private int [] defenceLvel={1,2,3,4,5};
+    private int damage=2;
     // human's position (unit: tile)
     private int x, y;
     // human's position (unit: pixel)
@@ -17,20 +19,23 @@ public class Human extends Character implements Common {
     //private int health;
     // human's direction (LEFT, RIGHT, UP or DOWN)
     private int direction;
+    private int attackDirection;
     // human's animation counter
     private int count;
+    private int[] healthLevel={100,150,200,250,300};
     private int health=100;
     //
 
     private boolean isMoving;
     private int moveLength;
-
+    private int[] levelExp={100,200,300,400,500};
+    private int level;
     private int moveType;
     private String message;
-
+    private boolean isAttackable=true;
     // thread for human animation
-    private Thread threadAnime;
-
+    private Thread threadPlayer;
+    private Thread threadAttack;
     // reference to Map
     private Map map;
 
@@ -39,8 +44,8 @@ public class Human extends Character implements Common {
         // init human
         this.x = x;
         this.y = y;
-        px = x * CS;
-        py = y * CS;
+        px = x * CS;//px=x*32
+        py = y * CS;//py=y*32
         this.id = id;
         this.direction = direction;
         this.moveType = moveType;
@@ -53,23 +58,26 @@ public class Human extends Character implements Common {
         }
 
         // run thread
-        threadAnime = new Thread(new AnimationThread());
-        threadAnime.start();
+        // threadAttack = new Thread(new AttackThread());
+        // threadAttack.start();
+        threadPlayer = new Thread(new PlayerThread());
+        threadPlayer.start();
     }
 
     public void draw(Graphics g, int offsetX, int offsetY) {
         int cx = (id % 8) * (CS * 2);
         int cy = (id / 8) * (CS * 4);
         // switch image based on animation counter
+        //
         g.drawImage(image,
                     px - offsetX,
                     py - offsetY,
                     px - offsetX + CS,
                     py - offsetY + CS,
                     cx + count * CS,
-                    cy + direction * CS,
+                    cy + direction * CS+attackDirection*CS,//+attackDirection*CS,
                     cx + CS + count * CS,
-                    cy + direction * CS + CS,
+                    cy + direction * CS + CS+attackDirection*CS,
                     null);
     }
 
@@ -240,38 +248,49 @@ public class Human extends Character implements Common {
     }
 
     public boolean attack(){
-      int nextX = 0;
-      int nextY = 0;
-      switch (direction) {
-        case LEFT:
-            nextX = x - 1;
-            nextY = y;
-            break;
-        case RIGHT:
-            nextX = x + 1;
-            nextY = y;
-            break;
-        case UP:
-            nextX = x;
-            nextY = y - 1;
-            break;
-        case DOWN:
-            nextX = x;
-            nextY = y + 1;
-            break;
-      }
-      //is there any monster??
-      Monster m = map.checkMonster(nextX, nextY);
-      if (m != null){
-        m.setHealth(m.getHealth()-damage);
+      if (isAttackable){
+        int nextX = 0;
+        int nextY = 0;
+        switch (direction) {
+          case LEFT:
+              nextX = x - 1;
+              nextY = y;
+              break;
+          case RIGHT:
+              nextX = x + 1;
+              nextY = y;
+              break;
+          case UP:
+              nextX = x;
+              nextY = y - 1;
+              break;
+          case DOWN:
+              nextX = x;
+              nextY = y + 1;
+              break;
+        }
+        //is there any monster??
+        Monster m = map.checkMonster(nextX, nextY);
+        if (m != null){
+          m.setHealth(m.getHealth()-damage);
+          //for(int i=400000000;i>0;i--){
+          //}
+        }
+        isAttackable=false;
       }
       return false;
     }
+
     public int getHealth(){
       return health;
     }
     public void setHealth(int health){
-      this.health=health;
+      if(health>0){
+        this.health=health;
+      }else dead();
+    }
+    public void dead(){
+      //System.out.println("dead");
     }
     public TreasureEvent search() {
         Event event = map.checkEvent(x, y);
@@ -362,9 +381,25 @@ public class Human extends Character implements Common {
             e.printStackTrace();
         }
     }
+    private class AttackThread extends Thread{
+      public void run(){
+        while (true){
+          if(isAttackable==false)
+          {
+            // isAttackable=false;
+            try{
+              Thread.sleep(300);
+            }catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            isAttackable=true;
+          }
 
+        }
+      }
+    }
     // Animation Class
-    private class AnimationThread extends Thread {
+    private class PlayerThread extends Thread {
         public void run() {
             while (true) {
                 if (count == 0) {
@@ -376,6 +411,16 @@ public class Human extends Character implements Common {
                     Thread.sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                }
+                if(isAttackable==false)
+                {
+                  // isAttackable=false;
+                  try{
+                    Thread.sleep(500);
+                  }catch (InterruptedException e) {
+                      e.printStackTrace();
+                  }
+                  isAttackable=true;
                 }
             }
         }
