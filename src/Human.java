@@ -9,9 +9,22 @@ public class Human extends Character implements Common {
 
     private static BufferedImage image;
     private int id;
-    private int [] damageLvl={1,2,3,4,5};
-    private int [] defenceLvel={1,2,3,4,5};
-    private int damage=2;
+    private int level=0;
+    private int exp=0;
+    private int [] levelExp={100,200,300,400,500};
+    private int damage;
+    private int [] damageLvl={10,20,30,40,50};
+    //private int [] defenceLvl={1,2,3,4,5};
+    private int [] maxHealth={100,150,200,250,300};
+    //private int damage=2;
+
+    public void levelUp(){
+      if(level<5 && exp>=levelExp[level]){
+        exp-=levelExp[level];
+        setLevel(level+1);
+        health=maxHealth[level];
+      }
+    }
     // human's position (unit: tile)
     private int x, y;
     // human's position (unit: pixel)
@@ -22,14 +35,12 @@ public class Human extends Character implements Common {
     private int attackDirection;
     // human's animation counter
     private int count;
-    private int[] healthLevel={100,150,200,250,300};
-    private int health=100;
+    private int health;
     //
 
     private boolean isMoving;
     private int moveLength;
-    private int[] levelExp={100,200,300,400,500};
-    private int level;
+//    private int level;
     private int moveType;
     private String message;
     private boolean isAttackable=true;
@@ -50,7 +61,7 @@ public class Human extends Character implements Common {
         this.direction = direction;
         this.moveType = moveType;
         this.map = map;
-
+        health=100;
         count = 0;
 
         if (image == null) {
@@ -272,7 +283,11 @@ public class Human extends Character implements Common {
         //is there any monster??
         Monster m = map.checkMonster(nextX, nextY);
         if (m != null){
-          m.setHealth(m.getHealth()-damage);
+          if(m.getHealth()-this.getDamage()<=0) {
+            exp+=50*m.getLevel();
+            levelUp();
+          }
+          m.setHealth(m.getHealth()-this.getDamage());
           //for(int i=400000000;i>0;i--){
           //}
         }
@@ -281,14 +296,6 @@ public class Human extends Character implements Common {
       return false;
     }
 
-    public int getHealth(){
-      return health;
-    }
-    public void setHealth(int health){
-      if(health>0){
-        this.health=health;
-      }else dead();
-    }
     public void dead(){
       //System.out.println("dead");
     }
@@ -327,6 +334,26 @@ public class Human extends Character implements Common {
         }
         return null;
     }
+    public int getHealth(){
+      return health;
+    }
+    public int getMaxHealth(){
+      return maxHealth[level];
+    }
+    public void setHealth(int health){
+      if(health>0){
+        this.health=health;
+      }else dead();
+    }
+    public int getExp(){
+      return exp;
+    }
+    public int getLevel(){
+      return level;
+    }
+    public void setLevel(int level){
+      this.level=level;
+    }
 
     public int getX() {
         return x;
@@ -346,8 +373,9 @@ public class Human extends Character implements Common {
     public int getDamage(){
       return damage;
     }
-    public void setDamage(int damage){
-      this.damage=damage;
+    public void setDamage(){
+      this.damage=damageLvl[level];
+      // this.damage=damage;
     }
     public void setDirection(int dir) {
         direction = dir;

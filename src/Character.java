@@ -24,7 +24,10 @@ public abstract class Character implements Common {
     private int damage;
     // character's defence;
     private int defence;
-
+    private int level=1;
+    public int getLevel(){
+      return level;
+    }
     private boolean isMoving;
     private int moveLength;
 

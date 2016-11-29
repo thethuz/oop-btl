@@ -205,11 +205,17 @@ public class Monster extends Character implements Common{
       if (h!=null){
         h.setHealth(h.getHealth()-damage);
         isAttackable=false;
+        isAttacking=true;
         return true;
       }
-
+      isAttacking=false;
+      return false;
     }
-    return false;
+      //Sẽ trả về false <=> h==null&&isAttackable=true || isAttackable=false?
+    return true;
+  }
+  public boolean isMonsterAttacking(){
+    return isAttacking;
   }
 
   public void draw(Graphics g, int offsetX, int offsetY) {

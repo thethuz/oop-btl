@@ -78,10 +78,8 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         //Human hero1 = new Human(6, 7, 0, UP, 0, maps[mapNo]);
         monster = new Monster (6,7, 0, DOWN, 0, maps[mapNo]);
 
-          for(int i=0;i<10;i++){
-          monsters[i]=new Monster(6,9+i,0,DOWN,1, maps[1]);
-          maps[1].addMonster(monsters[i]);
-        }
+        arrangeMonster(1,10);
+        arrangeMonster(2,10);
         // add humans to the map
         maps[mapNo].addHuman(hero);
         //maps[mapNo].addHuman(hero1);
@@ -102,7 +100,17 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
         gameLoop.start();
     }
+    public void arrangeMonster(int mapID, int numberOfMonsters){
+      for(int i=0;i<numberOfMonsters;i++){
+        int x, y;
+        do{
+          x=rand.nextInt(maps[mapID].getRow());y=rand.nextInt(maps[mapID].getCol());
 
+        } while(maps[mapID].isHit(x,y));
+        monsters[i]=new Monster(x,y,0,DOWN,1, maps[mapID]);
+        maps[mapID].addMonster(monsters[i]);
+      }
+    }
     public void run() {
         long beforeTime, timeDiff, sleepTime;
 
@@ -194,9 +202,10 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             dbg.drawString(maps[mapNo].getMapName() + " (" + maps[mapNo].getCol() + "," + maps[mapNo].getRow() + ")", 4, 16);
             dbg.drawString("(" + hero.getX() + "," + hero.getY() + ") ", 4, 32);
             dbg.drawString("(" + hero.getPX() + "," + hero.getPY() + ")", 4, 48);
-            dbg.drawString("Health: "+ hero.getHealth() + "/ 100", 4, 64);
+            dbg.drawString("Health: "+ hero.getHealth() + "/"+hero.getMaxHealth(), 4, 64);
             dbg.drawString("Damage: "+ hero.getDamage() , 4, 80);
-            dbg.drawString("Defence: "+ hero.getDefence() , 4, 96);
+            //dbg.drawString("Defence: "+ hero.getDefence() , 4, 96);
+            dbg.drawString("Exp: "+ hero.getExp() +" Level: "+hero.getLevel(), 4, 96);
             dbg.drawString(maps[mapNo].getBgmName(), 4, 112);
         }
     }
@@ -306,10 +315,19 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                     waveEngine.play("step");
                     // move to another map
                     MoveEvent m = (MoveEvent)event;
-                    maps[mapNo].removeHuman(hero);
+                    //Human heroTemp=new Human();
+                    int temp=mapNo;
+                    //
                     mapNo = m.destMapNo;
-                    hero = new Human(m.destX, m.destY, 0, DOWN, 0, maps[mapNo]);
+
                     maps[mapNo].addHuman(hero);
+
+                    Human tempHero = new Human(m.destX, m.destY, 0, DOWN, 0, maps[mapNo]);
+                    // tempHero.setHealth
+
+                    //
+                    maps[temp].removeHuman(hero);
+
                     midiEngine.play(maps[mapNo].getBgmName());
                 }
             }
@@ -322,12 +340,15 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
       // move each monster
       for (int i = 0; i < monsters.size(); i++) {
           Monster c = monsters.get(i);
-
+          //Nếu c.isMoving==true và c.isNotAttacking==true then move;
+          //else hoặc isMoving=false hoặc isNotAttacking==false
+          //Nếu isNotAttacking thì đổi hướng
+          //thì đổi hướng
           if (c.getMoveType() == 1) {
-              if (c.isMoving()) {
+              if (c.isMoving()&&(c.isMonsterAttacking()==false)) {
                   //System.out.println("monster "+i+" is moving"+c.getDirection());
                   c.move();
-              } else if (rand.nextDouble() < Monster.PROB_MOVE) {
+              } else if ( (c.isMonsterAttacking()==false) && (rand.nextDouble() < Monster.PROB_MOVE) ) {
                   c.setDirection(rand.nextInt(4));
                   c.setMoving(true);
               }
@@ -346,6 +367,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                   System.out.println("Monster "+i+" is attacking"+c.getDirection());
 
               } else if (rand.nextDouble() < Monster.PROB_MOVE) {
+                  // System.out.println("Monster "+i+": Hahaha");
                   c.setDirection(rand.nextInt(4));
                   c.setMoving(true);
               }
