@@ -9,7 +9,7 @@ public class DangerousMonster extends Monster implements Common{
   private static BufferedImage image;
   private int x,y,px,py,id,moveType;
   private Map map;
-  // private int vision=2;
+  private int vision=2;
   public DangerousMonster(int x, int y, int id, int direction, int moveType, Map map) {
       super(x, y, id, direction, moveType, map);
       // init monster
@@ -36,21 +36,69 @@ public class DangerousMonster extends Monster implements Common{
   }
 
   public boolean attack(){
-    /*if(isAttackable()){
+    if(isAttackable()) {
     Human m;
     for (int i=-vision;i<=vision;i++)
       for(int j=-vision;j<=vision;j++){
-        m = map.checkHuman(this.getX()+i,this.getY()+j);
+        m = map.checkHuman(getX()+i,getY()+j);
         if(m!=null) {
-          if((i==-2 && j==-2) || (i==-1 && j<0)|| (i==0 && j<0) || (i==1 && j<0) || (i==2 && j==-2)) setDirection(LEFT);
-          else if((i==-2 && j==+2) || (i==-1 && j>0) || (i==0 && j>0) || (i==1 && j>0) || (i==2 && j==2)) setDirection(RIGHT);
-          else if(i<0) setDirection(UP);
-          else if(i>0) setDirection(DOWN);
-          break;
+          //System.out.println(i+";"+j);
+          if(j<0) {
+            setDirection(UP);
+            //System.out.println("UP");
+          }
+          if(j>0) {
+            setDirection(DOWN);
+            //System.out.println("DOWN");
+          }
+          if(i>0) {
+
+            setDirection(RIGHT);
+            //System.out.println("RIGHT");
+          }
+          if(i<0) {
+            setDirection(LEFT);
+            //System.out.println("LEFT");
+          }
+          //break;
         }
       }
-    }/**/
-    return false;
+        int nextX=0;
+        int nextY=0;
+        switch (getDirection()) {
+        case LEFT:
+          nextX = getX()-1;
+          nextY = getY();
+          break;
+        case RIGHT:
+          nextX = getX()+1;
+          nextY = getY();
+          break;
+        case UP:
+          nextX = getX();
+          nextY = getY()-1;
+          break;
+        case DOWN:
+          nextX = getX();
+          nextY = getY()+1;
+          break;
+        }
+
+      Human h = map.checkHuman(nextX, nextY);
+      //System.out.println(nextX+";"+ nextY);
+      if (h!=null){
+        h.setHealth(h.getHealth()-getDamage());
+        System.out.println("monster is attacking");
+        setIsAttackable(false);
+        setAttacking(true);
+        return true;
+      }
+      setAttacking(false);
+      return false;
+    }
+    /**/
+    setAttacking(false);
+    return true;
   }
 
   private class PlayerThread extends Thread {

@@ -235,6 +235,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             Monster m = maps[mapNo].checkMonster(nextX, nextY);
             if(m!=null){
               dbg.drawString("Health: "+ m.getHealth() + "/100", 300, 64);
+              dbg.drawString("Damage: "+ m.getDamage() + "/100", 300, 80);
             }
             dbg.drawString("Damage: "+ hero.getDamage() , 4, 80);
             //dbg.drawString("Defence: "+ hero.getDefence() , 4, 96);
@@ -406,7 +407,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
           Monster c = monsters.get(i);
           if (c.getAttackType() == 1) {
               if (c.attack()) {
-                  System.out.println("Monster "+i+" is attacking"+c.getDirection());
+                  //System.out.println("Monster "+i+" is attacking"+c.getDirection());
 
               } else if (rand.nextDouble() < Monster.PROB_MOVE) {
                   // System.out.println("Monster "+i+": Hahaha");

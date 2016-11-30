@@ -300,7 +300,7 @@ public class Human extends Character implements Common {
       return direction;
     }
     public void setExp(int exp){
-      while(level<4) if(exp>levelExp[level]) levelUp();
+      //while(level<4) if(exp>levelExp[level]) levelUp();
       this.exp=exp;
     }
     public int getExp(){
