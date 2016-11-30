@@ -233,7 +233,7 @@ public class Monster extends Character implements Common{
                   cy + direction * CS + CS,
                   null);
   }
-  private void loadImage(String filename) {
+  public void loadImage(String filename) {
       try {
           image = ImageIO.read(getClass().getResource(filename));
       } catch (IOException e) {
@@ -285,6 +285,12 @@ public class Monster extends Character implements Common{
               }
           }
       }
+  }
+  public boolean isAttackable(){
+    return isAttackable;
+  }
+  public void setIsAttackable(boolean x){
+    this.isAttackable=x;
   }
   public int getX() {
       return x;

@@ -127,7 +127,7 @@ public abstract class Character implements Common {
       return defence;
     }
 
-    private void loadImage(String filename) {
+    public void loadImage(String filename) {
         try {
             image = ImageIO.read(getClass().getResource(filename));
         } catch (IOException e) {

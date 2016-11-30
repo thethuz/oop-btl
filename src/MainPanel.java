@@ -24,6 +24,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
     private Monster monster;
     private Monster[] monsters=new Monster[10];
+    private Monster[] dangerousMonster=new DangerousMonster[10];
     // action keys
     private ActionKey leftKey;
     private ActionKey rightKey;
@@ -104,11 +105,19 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
       for(int i=0;i<numberOfMonsters;i++){
         int x, y;
         do{
-          x=rand.nextInt(maps[mapID].getRow());y=rand.nextInt(maps[mapID].getCol());
+          x=rand.nextInt(maps[mapID].getRow());
+          y=rand.nextInt(maps[mapID].getCol());
 
         } while(maps[mapID].isHit(x,y));
         monsters[i]=new Monster(x,y,0,DOWN,1, maps[mapID]);
+        do{
+          x=rand.nextInt(maps[mapID].getRow());
+          y=rand.nextInt(maps[mapID].getCol());
+
+        } while(maps[mapID].isHit(x,y));
+        dangerousMonster[i]=new DangerousMonster(x,y,1,DOWN,1, maps[mapID]);
         maps[mapID].addMonster(monsters[i]);
+        maps[mapID].addMonster(dangerousMonster[i]);
       }
     }
     public void run() {
@@ -203,6 +212,30 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             dbg.drawString("(" + hero.getX() + "," + hero.getY() + ") ", 4, 32);
             dbg.drawString("(" + hero.getPX() + "," + hero.getPY() + ")", 4, 48);
             dbg.drawString("Health: "+ hero.getHealth() + "/"+hero.getMaxHealth(), 4, 64);
+            int nextX=0;
+            int nextY=0;
+            switch (hero.getDirection()) {
+              case LEFT:
+                  nextX =hero.getX() - 1;
+                  nextY =hero.getY();
+                  break;
+              case RIGHT:
+                  nextX =hero.getX() + 1;
+                  nextY =hero.getY();
+                  break;
+              case UP:
+                  nextX =hero.getX();
+                  nextY =hero.getY() - 1;
+                  break;
+              case DOWN:
+                  nextX =hero.getX();
+                  nextY =hero.getY() + 1;
+                  break;
+            }//System.out.println(nextX+";"+nextY);
+            Monster m = maps[mapNo].checkMonster(nextX, nextY);
+            if(m!=null){
+              dbg.drawString("Health: "+ m.getHealth() + "/100", 300, 64);
+            }
             dbg.drawString("Damage: "+ hero.getDamage() , 4, 80);
             //dbg.drawString("Defence: "+ hero.getDefence() , 4, 96);
             dbg.drawString("Exp: "+ hero.getExp() +" Level: "+hero.getLevel(), 4, 96);
@@ -315,18 +348,27 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                     waveEngine.play("step");
                     // move to another map
                     MoveEvent m = (MoveEvent)event;
+                    int tempHealth=hero.getHealth();
+                    int tempLevel=hero.getLevel();
+                    int tempDamage=hero.getDamage();
+                    int tempExp=hero.getExp();
+                    maps[mapNo].removeHuman(hero);
+
                     //Human heroTemp=new Human();
-                    int temp=mapNo;
+                    //int temp=mapNo;
                     //
                     mapNo = m.destMapNo;
 
+                    //maps[mapNo].addHuman(hero);
+
+                    hero = new Human(m.destX, m.destY, 0, DOWN, 0, maps[mapNo]);
+                    //tempHero.setHealth
+                    hero.setHealth(tempHealth);
+                    hero.setDamage(tempDamage);
+                    hero.setLevel(tempLevel);
+                    hero.setExp(tempExp);
                     maps[mapNo].addHuman(hero);
-
-                    Human tempHero = new Human(m.destX, m.destY, 0, DOWN, 0, maps[mapNo]);
-                    // tempHero.setHealth
-
                     //
-                    maps[temp].removeHuman(hero);
 
                     midiEngine.play(maps[mapNo].getBgmName());
                 }

@@ -12,17 +12,18 @@ public class Human extends Character implements Common {
     private int level=0;
     private int exp=0;
     private int [] levelExp={100,200,300,400,500};
-    private int damage;
+    private int damage=10;
     private int [] damageLvl={10,20,30,40,50};
     //private int [] defenceLvl={1,2,3,4,5};
     private int [] maxHealth={100,150,200,250,300};
     //private int damage=2;
 
     public void levelUp(){
-      if(level<5 && exp>=levelExp[level]){
+      if(level<4 && exp>=levelExp[level]){
         exp-=levelExp[level];
         setLevel(level+1);
-        health=maxHealth[level];
+        setHealth(maxHealth[level]);
+        setDamage(damageLvl[level]);
       }
     }
     // human's position (unit: tile)
@@ -284,7 +285,7 @@ public class Human extends Character implements Common {
         Monster m = map.checkMonster(nextX, nextY);
         if (m != null){
           if(m.getHealth()-this.getDamage()<=0) {
-            exp+=50*m.getLevel();
+            setExp(getExp()+50*m.getLevel());
             levelUp();
           }
           m.setHealth(m.getHealth()-this.getDamage());
@@ -295,7 +296,16 @@ public class Human extends Character implements Common {
       }
       return false;
     }
-
+    public int getDirection(){
+      return direction;
+    }
+    public void setExp(int exp){
+      while(level<4) if(exp>levelExp[level]) levelUp();
+      this.exp=exp;
+    }
+    public int getExp(){
+      return exp;
+    }
     public void dead(){
       //System.out.println("dead");
     }
@@ -345,9 +355,9 @@ public class Human extends Character implements Common {
         this.health=health;
       }else dead();
     }
-    public int getExp(){
-      return exp;
-    }
+    // public int getExp(){
+    //   return exp;
+    // }
     public int getLevel(){
       return level;
     }
@@ -373,8 +383,8 @@ public class Human extends Character implements Common {
     public int getDamage(){
       return damage;
     }
-    public void setDamage(){
-      this.damage=damageLvl[level];
+    public void setDamage(int damage){
+      this.damage=damage;
       // this.damage=damage;
     }
     public void setDirection(int dir) {
@@ -402,7 +412,7 @@ public class Human extends Character implements Common {
         return moveType;
     }
 
-    private void loadImage(String filename) {
+    public void loadImage(String filename) {
         try {
             image = ImageIO.read(getClass().getResource(filename));
         } catch (IOException e) {
