@@ -25,12 +25,8 @@ public class DangerousMonster extends Monster implements Common{
       count = 0;
 
       if (image == null) {
-          loadImage("image/human.gif");
+          loadImage("image/monster.gif");
       }
-
-      // run thread
-      // threadAttack = new Thread(new AttackThread());
-      // threadAttack.start();
       threadPlayer = new Thread(new PlayerThread());
       threadPlayer.start();
   }

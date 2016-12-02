@@ -95,6 +95,10 @@ public class Map implements Common {
             m.draw(g, offsetX, offsetY);
         }
     }
+    public boolean isUnflyable(int x, int y){
+      if(map[y][x]==5) return true;
+      return false;
+    }
 
     public boolean isHit(int x, int y) {
       //24678910
@@ -126,7 +130,7 @@ public class Map implements Common {
         // Are there any monster?
         for (int i = 0; i < monsters.size(); i++) {
             Monster m = monsters.get(i);
-            if (m.getX() == x && m.getY() == y) {
+            if (m.getX() == x && m.getY() == y && ( m instanceof FlyingMonster == false) ) {
                 return true;
             }
         }

@@ -15,12 +15,17 @@ public class Monster extends Character implements Common{
   private int x, y;
   // monster's position (unit: pixel)
   private int px, py;
-
+  private String name;
   // monster's direction (LEFT, RIGHT, UP or DOWN)
   private int direction;
   // monster's animation counter
   private int count;
-
+  public void setName(String name){
+    this.name=name;
+  }
+  public String getName(){
+    return name;
+  }
   private boolean isMoving;
   private int moveLength;
   private boolean isAttacking=false;
@@ -49,7 +54,8 @@ public class Monster extends Character implements Common{
       count = 0;
 
       if (image == null) {
-          loadImage("image/human.gif");
+          System.out.println("Load Image");
+          loadImage("image/monster.gif");
       }
 
       // run thread

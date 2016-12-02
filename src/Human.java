@@ -6,7 +6,7 @@ import javax.imageio.*;
 public class Human extends Character implements Common {
     private static final int SPEED = 4;
     public static  final double PROB_MOVE = 0.02;
-
+    private boolean isDead=false;
     private static BufferedImage image;
     private int id;
     private int level=0;
@@ -307,7 +307,11 @@ public class Human extends Character implements Common {
       return exp;
     }
     public void dead(){
+      isDead=true;
       //System.out.println("dead");
+    }
+    public boolean isDead(){
+      return isDead;
     }
     public TreasureEvent search() {
         Event event = map.checkEvent(x, y);

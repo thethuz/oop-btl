@@ -25,6 +25,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
     private Monster monster;
     private Monster[] monsters=new Monster[10];
     private Monster[] dangerousMonster=new DangerousMonster[10];
+    private Monster[] flyingMonster =new FlyingMonster[10];
     // action keys
     private ActionKey leftKey;
     private ActionKey rightKey;
@@ -79,8 +80,8 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         //Human hero1 = new Human(6, 7, 0, UP, 0, maps[mapNo]);
         monster = new Monster (6,7, 0, DOWN, 0, maps[mapNo]);
 
-        arrangeMonster(1,10);
-        arrangeMonster(2,10);
+        arrangeMonster(1,7);
+        arrangeMonster(2,7);
         // add humans to the map
         maps[mapNo].addHuman(hero);
         //maps[mapNo].addHuman(hero1);
@@ -110,14 +111,26 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
         } while(maps[mapID].isHit(x,y));
         monsters[i]=new Monster(x,y,0,DOWN,1, maps[mapID]);
+        monsters[i].setName("Quỷ chưa nguy hiểm lắm");
+        //
         do{
           x=rand.nextInt(maps[mapID].getRow());
           y=rand.nextInt(maps[mapID].getCol());
 
         } while(maps[mapID].isHit(x,y));
         dangerousMonster[i]=new DangerousMonster(x,y,1,DOWN,1, maps[mapID]);
+        dangerousMonster[i].setName("Quỷ nguy hiểm");
         maps[mapID].addMonster(monsters[i]);
         maps[mapID].addMonster(dangerousMonster[i]);
+        //
+        do{
+          x=rand.nextInt(maps[mapID].getRow());
+          y=rand.nextInt(maps[mapID].getCol());
+
+        } while(maps[mapID].isUnflyable(x,y));
+        flyingMonster[i]= new FlyingMonster(x,y,3,DOWN,1,maps[mapID]);
+        flyingMonster[i].setName("Quỷ biết bay");
+        maps[mapID].addMonster(flyingMonster[i]);
       }
     }
     public void run() {
@@ -234,13 +247,22 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             }//System.out.println(nextX+";"+nextY);
             Monster m = maps[mapNo].checkMonster(nextX, nextY);
             if(m!=null){
-              dbg.drawString("Health: "+ m.getHealth() + "/100", 300, 64);
-              dbg.drawString("Damage: "+ m.getDamage() + "/100", 300, 80);
+              dbg.drawString("Name: "+ m.getName(), 250, 48);
+              dbg.drawString("Health: "+ m.getHealth() + "/100", 250, 64);
+              dbg.drawString("Damage: "+ m.getDamage() + "/100", 250, 80);
             }
             dbg.drawString("Damage: "+ hero.getDamage() , 4, 80);
             //dbg.drawString("Defence: "+ hero.getDefence() , 4, 96);
+
             dbg.drawString("Exp: "+ hero.getExp() +" Level: "+hero.getLevel(), 4, 96);
             dbg.drawString(maps[mapNo].getBgmName(), 4, 112);
+            //
+            if (hero.isDead() == true) {
+                dbg.setColor(Color.BLACK);
+                dbg.fillRect(0, 0, MainPanel.WIDTH, MainPanel.HEIGHT);
+                dbg.setColor(Color.WHITE);
+                dbg.drawString("GAME OVER", 300, 320);
+            }
         }
     }
 
