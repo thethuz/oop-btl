@@ -33,7 +33,7 @@ public class Human extends Character implements Common {
     //private int health;
     // human's direction (LEFT, RIGHT, UP or DOWN)
     private int direction;
-    private int attackDirection;
+    private int attackDirection=0;
     // human's animation counter
     private int count;
     private int health;
@@ -66,7 +66,7 @@ public class Human extends Character implements Common {
         count = 0;
 
         if (image == null) {
-            loadImage("image/human.gif");
+            loadImage("image/human-extends.gif");
         }
 
         // run thread
@@ -126,6 +126,7 @@ public class Human extends Character implements Common {
         int nextY = y;
         if (nextX < 0) nextX = 0;
         if (!map.isHit(nextX, nextY)) {
+            // System.out.println("my"+moveLength);
             px -= Human.SPEED;
             if (px < 0) px = 0;
             moveLength += Human.SPEED;
@@ -135,13 +136,16 @@ public class Human extends Character implements Common {
                 x--;
                 px = x * CS;
                 isMoving = false;
+                //System.out.println("LEFT true");
                 return true;
             }
         } else {
             isMoving = false;
             px = x * CS;
             py = y * CS;
+            //System.out.println("LEFT true 2");
         }
+        //System.out.println("LEFT false");
         return false;
     }
 
@@ -289,6 +293,7 @@ public class Human extends Character implements Common {
             levelUp();
           }
           m.setHealth(m.getHealth()-this.getDamage());
+          attackDirection=4;
           //for(int i=400000000;i>0;i--){
           //}
         }
@@ -423,23 +428,7 @@ public class Human extends Character implements Common {
             e.printStackTrace();
         }
     }
-    private class AttackThread extends Thread{
-      public void run(){
-        while (true){
-          if(isAttackable==false)
-          {
-            // isAttackable=false;
-            try{
-              Thread.sleep(300);
-            }catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            isAttackable=true;
-          }
 
-        }
-      }
-    }
     // Animation Class
     private class PlayerThread extends Thread {
         public void run() {
@@ -462,6 +451,7 @@ public class Human extends Character implements Common {
                   }catch (InterruptedException e) {
                       e.printStackTrace();
                   }
+                  attackDirection=0;
                   isAttackable=true;
                 }
             }

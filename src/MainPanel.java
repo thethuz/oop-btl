@@ -218,6 +218,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
         // thông tin góc trên bên trái
         if (DEBUG_MODE) {
+          //class human method printInformation
             Font font = new Font("SansSerif", Font.BOLD, 16);
             dbg.setFont(font);
             dbg.setColor(Color.YELLOW);
@@ -225,8 +226,13 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             dbg.drawString("(" + hero.getX() + "," + hero.getY() + ") ", 4, 32);
             dbg.drawString("(" + hero.getPX() + "," + hero.getPY() + ")", 4, 48);
             dbg.drawString("Health: "+ hero.getHealth() + "/"+hero.getMaxHealth(), 4, 64);
+            dbg.drawString("Damage: "+ hero.getDamage() , 4, 80);
+            dbg.drawString("Exp: "+ hero.getExp() +" Level: "+hero.getLevel(), 4, 96);
+            dbg.drawString(maps[mapNo].getBgmName(), 4, 112);
+            //class monster method printInformation
             int nextX=0;
             int nextY=0;
+
             switch (hero.getDirection()) {
               case LEFT:
                   nextX =hero.getX() - 1;
@@ -251,11 +257,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
               dbg.drawString("Health: "+ m.getHealth() + "/100", 250, 64);
               dbg.drawString("Damage: "+ m.getDamage() + "/100", 250, 80);
             }
-            dbg.drawString("Damage: "+ hero.getDamage() , 4, 80);
-            //dbg.drawString("Defence: "+ hero.getDefence() , 4, 96);
 
-            dbg.drawString("Exp: "+ hero.getExp() +" Level: "+hero.getLevel(), 4, 96);
-            dbg.drawString(maps[mapNo].getBgmName(), 4, 112);
             //
             if (hero.isDead() == true) {
                 dbg.setColor(Color.BLACK);
@@ -404,18 +406,19 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
       Vector<Monster> monsters = maps[mapNo].getMonsters();
       // move each monster
       for (int i = 0; i < monsters.size(); i++) {
-          Monster c = monsters.get(i);
+          Monster m = monsters.get(i);
           //Nếu c.isMoving==true và c.isNotAttacking==true then move;
           //else hoặc isMoving=false hoặc isNotAttacking==false
           //Nếu isNotAttacking thì đổi hướng
           //thì đổi hướng
-          if (c.getMoveType() == 1) {
-              if (c.isMoving()&&(c.isMonsterAttacking()==false)) {
+          if (m.getMoveType() == 1) {
+              if (m.isMoving()&&(m.isMonsterAttacking()==false)) {
                   //System.out.println("monster "+i+" is moving"+c.getDirection());
-                  c.move();
-              } else if ( (c.isMonsterAttacking()==false) && (rand.nextDouble() < Monster.PROB_MOVE) ) {
-                  c.setDirection(rand.nextInt(4));
-                  c.setMoving(true);
+                  m.move();
+                  // System.out.println(m.getX()+";"+m.getY());
+              } else if ( (m.isMonsterAttacking()==false) && (rand.nextDouble() < Monster.PROB_MOVE) ) {
+                  m.setDirection(rand.nextInt(4));
+                  m.setMoving(true);
               }
           }
       }

@@ -40,6 +40,7 @@ public class Monster extends Character implements Common{
   // reference to Map
   private Map map;
   //Tọa độ x, tọa độ y, vị trí trong image/monster.gif, hướng, kiểu di chuyển(0 đứng yên, 1 tự động), map
+
   public Monster(int x, int y, int id, int direction, int moveType, Map map) {
       // init monster
       this.x = x;
@@ -182,6 +183,18 @@ public class Monster extends Character implements Common{
         py = y * CS;
     }
     return false;
+  }
+  public void setPX(int px){
+    this.px=px;
+  }
+  public void setPY(int py){
+    this.py=py;
+  }
+  public void setX(int x){
+    this.x=x;
+  }
+  public void setY(int y){
+    this.y=y;
   }
 
   public boolean attack(){

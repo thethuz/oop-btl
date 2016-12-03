@@ -7,19 +7,19 @@ public class DangerousMonster extends Monster implements Common{
   private int count;
   private Thread threadPlayer;
   private static BufferedImage image;
-  private int x,y,px,py,id,moveType;
+  // private int x,y,px,py,id,moveType;
   private Map map;
   private int vision=2;
   public DangerousMonster(int x, int y, int id, int direction, int moveType, Map map) {
       super(x, y, id, direction, moveType, map);
       // init monster
-      this.x = x;
-      this.y = y;
-      px = x * CS;
-      py = y * CS;
-      this.id = id;
-      setDirection(direction);
-      this.moveType = moveType;
+      // this.x = x;
+      // this.y = y;
+      // px = x * CS;
+      // py = y * CS;
+      // this.id = id;
+      // setDirection(direction);
+      // this.moveType = moveType;
       this.map = map;
 
       count = 0;

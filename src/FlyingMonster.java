@@ -4,26 +4,27 @@ import java.awt.image.*;
 import javax.imageio.*;
 
 public class FlyingMonster extends Monster implements Common{
-  private static final int SPEED = 6;
+  private static final int SPEED = 4;
   public static  final double PROB_MOVE = 0.02;
   private int count;
   private Thread threadPlayer;
   private static BufferedImage image;
-  private int x,y,px,py,id,moveType;
+  // private int x,y,px,py,id,moveType;
   //
+  private boolean isFlying;
   private int moveLength;
   private Map map;
   //private int vision=2;
   public FlyingMonster(int x, int y, int id, int direction, int moveType, Map map) {
       super(x, y, id, direction, moveType, map);
       // init monster
-      this.x = x;
-      this.y = y;
-      px = x * CS;
-      py = y * CS;
-      this.id = id;
-      setDirection(getDirection());
-      this.moveType = moveType;
+      // this.x = x;
+      // this.y = y;
+      // px = x * CS;
+      // py = y * CS;
+      // this.id = id;
+      // setDirection(direction);
+      // this.moveType = moveType;
       this.map = map;
 
       count = 0;
@@ -34,7 +35,6 @@ public class FlyingMonster extends Monster implements Common{
       threadPlayer = new Thread(new PlayerThread());
       threadPlayer.start();
   }
-
   public boolean move(){
     switch (getDirection()) {
     case LEFT:
@@ -63,93 +63,110 @@ public class FlyingMonster extends Monster implements Common{
   }
 
   public boolean moveLeft(){
-    int nextX = x - 1;
-    int nextY = y;
-    if (nextX < 0) nextX = 0;
+    int nextX = getX() - 1;
+    int nextY = getY();
+    if (nextX <= 0) nextX = 0;
     if (!map.isUnflyable(nextX, nextY)) {
-        px -= FlyingMonster.SPEED;
-        if (px < 0) px = 0;
+        setPX(getPX()- FlyingMonster.SPEED) ;
+        if (getPX() < 0) setPX(0);
         moveLength += FlyingMonster.SPEED;
         if (moveLength >= CS) {
             // pixel-based scrolling is completed
             // hero moves to left tile
-            x--;
-            px = x * CS;
+            setX(getX()-1);
+            setPX( getX() * CS);
             setMoving(false);
+            moveLength=0;
+            System.out.println(getDirection()+" "+getPX()+"; "+getPY());
+            System.out.println(getDirection()+" "+getPY());
             return true;
         }
+        System.out.println(getDirection()+" "+getPY());
     } else {
         setMoving(false);
-        px = x * CS;
-        py = y * CS;
-    }
+        setPX(getX()*CS);
+        setPY(getY()*CS);
+        System.out.println(getDirection()+" "+getPY());
+      }
+System.out.println(getDirection()+" "+getPY());
     return false;
   }
 
   public boolean moveRight(){
-    int nextX = x + 1;
-    int nextY = y;
-    if (nextX > map.getCol() - 1) nextX = map.getCol() - 1;
+    int nextX =getX()+ 1;
+    int nextY = getY();
+    if (nextX >= map.getCol() - 1) nextX = map.getCol() - 1;
     if (!map.isUnflyable(nextX, nextY)) {
-        px += FlyingMonster.SPEED;
-        if (px > map.getWidth() - CS)
-            px = map.getWidth() - CS;
+        setPX(getPX()+ FlyingMonster.SPEED);
+        if (getPX() > map.getWidth() - CS)
+            setPX(map.getWidth() - CS);
         moveLength += FlyingMonster.SPEED;
         if (moveLength >= CS) {
-            x++;
-            px = x * CS;
+            setX(getX()+1);
+            setPX(getX()* CS);
             setMoving(false);
+            moveLength=0;
+            System.out.println(getDirection()+" "+getPY());
             return true;
         }
+        System.out.println(getDirection()+" "+getPY());
     } else {
         setMoving(false);
-        px = x * CS;
-        py = y * CS;
+        setPX(getX()*CS);
+        setPY(getY()*CS);
+        System.out.println(getDirection()+" "+getPY());
     }
+    System.out.println(getDirection()+" "+getPY());
     return false;
   }
 
   public boolean moveUp(){
-    int nextX = x;
-    int nextY = y - 1;
-    if (nextY < 0) nextY = 0;
+    int nextX =getX();
+    int nextY =getY()- 1;
+    if (nextY <= 0) nextY = 0;
     if (!map.isUnflyable(nextX, nextY)) {
-        py -= FlyingMonster.SPEED;
-        if (py < 0) py = 0;
+        setPY(getPY()-FlyingMonster.SPEED);
+        if (getPY() < 0) setPY(0);
         moveLength += FlyingMonster.SPEED;
         if (moveLength >= CS) {
-            y--;
-            py = y * CS;
+            setY(getY()-1);
+            setPY(getY()*CS);
             setMoving(false);
+            System.out.println(getDirection()+" "+getPY());
             return true;
         }
+        System.out.println(getDirection()+" "+getPY());
     } else {
         setMoving(false);
-        px = x * CS;
-        py = y * CS;
+        setPX(getX()*CS);
+        setPY(getY()*CS);
+        System.out.println(getDirection()+" "+getPY());
     }
+    System.out.println(getDirection()+" "+getPY());
     return false;
   }
 
   public boolean moveDown(){
-    int nextX = x;
-    int nextY = y + 1;
-    if (nextY > map.getRow() - 1) nextY = map.getRow() - 1;
+    int nextX =getX();
+    int nextY =getY()+ 1;
+    if (nextY >= map.getRow() - 1) nextY = map.getRow() - 1;
     if (!map.isUnflyable(nextX, nextY)) {
-        py += FlyingMonster.SPEED;
-        if (py > map.getHeight() - CS)
-            py = map.getHeight() - CS;
+        setPY(getPY()+FlyingMonster.SPEED);
+        System.out.println(getDirection()+" "+getPY());
+        if (getPY() > map.getHeight() - CS)
+            setPY(map.getHeight() - CS);
         moveLength += FlyingMonster.SPEED;
         if (moveLength >= CS) {
-            y++;
-            py = y * CS;
+            setY(getY()+1);
+            setPY(getY()*CS);
             setMoving(false);
             return true;
-        }
+        }System.out.println(getDirection()+" "+getPX()+"; /"+getPY());
     } else {
         setMoving(false);
-        px = x * CS;
-        py = y * CS;
+        setPX(getX()*CS);
+        setPY(getY()*CS);
+
     }
     return false;
   }
@@ -165,7 +182,7 @@ public class FlyingMonster extends Monster implements Common{
                   count = 0;
               }
               try {
-                  Thread.sleep(300);
+                  Thread.sleep(400);
               } catch (InterruptedException e) {
                   e.printStackTrace();
               }
