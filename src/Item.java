@@ -7,7 +7,7 @@ import java.util.Vector;
 
 public class Item{
 
-  private int x = 0, y = 10, z = 10;
+  private int x = 1, y = 10, z = 10;
 
   private String itemName;
 

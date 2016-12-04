@@ -219,9 +219,30 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
         // draw message window
         messageWindow.draw(dbg);
+        hero.printInfomation(dbg);
+
+        Monster m=null;
+        switch(hero.getDirection()){
+          // int nextX,nextY;
+          case(LEFT):
+            m=maps[mapNo].checkMonster(hero.getX()-1,hero.getY());
+            if (m!=null) m.printInfomation(dbg);
+            break;
+          case(RIGHT):
+            m=maps[mapNo].checkMonster(hero.getX()+1,hero.getY());
+            if (m!=null) m.printInfomation(dbg);
+            break;
+          case(UP):
+            m=maps[mapNo].checkMonster(hero.getX(),hero.getY()-1);
+            if (m!=null) m.printInfomation(dbg);
+            break;
+          case(DOWN):
+            m=maps[mapNo].checkMonster(hero.getX(),hero.getY()+1);
+            if (m!=null) m.printInfomation(dbg);
+            break;
+        }
 
         // thông tin góc trên bên trái
-        hero.printInfomation(dbg);
         if (hero.isDead() == true) {
             dbg.setColor(Color.BLACK);
             dbg.fillRect(0, 0, MainPanel.WIDTH, MainPanel.HEIGHT);

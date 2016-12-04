@@ -65,6 +65,18 @@ public class Monster extends Character implements Common{
       threadPlayer = new Thread(new PlayerThread());
       threadPlayer.start();
   }
+  public void printInfomation(Graphics g) {
+      Font font = new Font("SansSerif", Font.BOLD, 16);
+          g.setFont(font);
+          g.setColor(Color.YELLOW);
+          //g.drawString(map.getMapName() + " (" + map.getCol() + "," + map.getRow() + ")", 4, 16);
+          //g.drawString("(" + getX() + "," + getY() + ") ", 4, 32);
+          //g.drawString("(" + getPX() + "," + getPY() + ")", 4, 48);
+          g.drawString("Health: " + getHealth() + "/100",240, 64);
+          g.drawString("Damage: " + getDamage(), 240, 80);
+          //g.drawString("Exp: " + getExp() + " Level: " + getLevel(), 4, 96);
+          //g.drawString(map.getBgmName(), 4, 112);
+  }
 
   public boolean move(){
     switch (direction) {
