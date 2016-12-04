@@ -77,18 +77,13 @@ public class FlyingMonster extends Monster implements Common{
             setPX( getX() * CS);
             setMoving(false);
             moveLength=0;
-            System.out.println(getDirection()+" "+getPX()+"; "+getPY());
-            System.out.println(getDirection()+" "+getPY());
             return true;
         }
-        System.out.println(getDirection()+" "+getPY());
     } else {
         setMoving(false);
         setPX(getX()*CS);
         setPY(getY()*CS);
-        System.out.println(getDirection()+" "+getPY());
       }
-System.out.println(getDirection()+" "+getPY());
     return false;
   }
 
@@ -106,17 +101,13 @@ System.out.println(getDirection()+" "+getPY());
             setPX(getX()* CS);
             setMoving(false);
             moveLength=0;
-            System.out.println(getDirection()+" "+getPY());
             return true;
         }
-        System.out.println(getDirection()+" "+getPY());
     } else {
         setMoving(false);
         setPX(getX()*CS);
         setPY(getY()*CS);
-        System.out.println(getDirection()+" "+getPY());
     }
-    System.out.println(getDirection()+" "+getPY());
     return false;
   }
 
@@ -132,17 +123,13 @@ System.out.println(getDirection()+" "+getPY());
             setY(getY()-1);
             setPY(getY()*CS);
             setMoving(false);
-            System.out.println(getDirection()+" "+getPY());
             return true;
         }
-        System.out.println(getDirection()+" "+getPY());
     } else {
         setMoving(false);
         setPX(getX()*CS);
         setPY(getY()*CS);
-        System.out.println(getDirection()+" "+getPY());
     }
-    System.out.println(getDirection()+" "+getPY());
     return false;
   }
 
@@ -152,7 +139,6 @@ System.out.println(getDirection()+" "+getPY());
     if (nextY >= map.getRow() - 1) nextY = map.getRow() - 1;
     if (!map.isUnflyable(nextX, nextY)) {
         setPY(getPY()+FlyingMonster.SPEED);
-        System.out.println(getDirection()+" "+getPY());
         if (getPY() > map.getHeight() - CS)
             setPY(map.getHeight() - CS);
         moveLength += FlyingMonster.SPEED;
@@ -161,7 +147,7 @@ System.out.println(getDirection()+" "+getPY());
             setPY(getY()*CS);
             setMoving(false);
             return true;
-        }System.out.println(getDirection()+" "+getPX()+"; /"+getPY());
+        }
     } else {
         setMoving(false);
         setPX(getX()*CS);

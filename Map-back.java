@@ -98,11 +98,9 @@ public class Map implements Common {
         }
 
         if (bgmName.equals("castle")) {
-            item.draw(g);
-            item.effect(humans.get(3));
+            item.drawItem(g, humans.get(3));
         } else {
-            item.draw(g);
-            item.effect(humans.get(0));
+            item.drawItem(g, humans.get(0));
         }
     }
     public boolean isUnflyable(int x, int y){

@@ -8,6 +8,7 @@ public class Human extends Character implements Common {
     public static  final double PROB_MOVE = 0.02;
     private boolean isDead=false;
     private static BufferedImage image;
+    private static BufferedImage image1;
     private int id;
     private int level=0;
     private int exp=0;
@@ -18,14 +19,6 @@ public class Human extends Character implements Common {
     private int [] maxHealth={100,150,200,250,300};
     //private int damage=2;
 
-    public void levelUp(){
-      if(level<4 && exp>=levelExp[level]){
-        exp-=levelExp[level];
-        setLevel(level+1);
-        setHealth(maxHealth[level]);
-        setDamage(damageLvl[level]);
-      }
-    }
     // human's position (unit: tile)
     private int x, y;
     // human's position (unit: pixel)
@@ -37,8 +30,9 @@ public class Human extends Character implements Common {
     // human's animation counter
     private int count;
     private int health;
+    private String name;
     //
-
+    private static boolean suitUp =false;
     private boolean isMoving;
     private int moveLength;
 //    private int level;
@@ -52,7 +46,7 @@ public class Human extends Character implements Common {
     private Map map;
 
 
-    public Human(int x, int y, int id, int direction, int moveType, Map map) {
+    public Human(int x, int y, int id, int direction, int moveType, Map map,String name) {
         // init human
         this.x = x;
         this.y = y;
@@ -62,11 +56,15 @@ public class Human extends Character implements Common {
         this.direction = direction;
         this.moveType = moveType;
         this.map = map;
+        this.name=name;
         health=100;
         count = 0;
 
         if (image == null) {
+          System.out.println("Load");
             loadImage("image/human-extends.gif");
+            loadImage("image/trangphuc1.png");
+
         }
 
         // run thread
@@ -75,22 +73,67 @@ public class Human extends Character implements Common {
         threadPlayer = new Thread(new PlayerThread());
         threadPlayer.start();
     }
+    public void levelUp(){
+      if(level<4 && exp>=levelExp[level]){
+        exp-=levelExp[level];
+        setLevel(level+1);
+        setHealth(maxHealth[level]);
+        setDamage(damageLvl[level]);
+      }
+    }
 
     public void draw(Graphics g, int offsetX, int offsetY) {
         int cx = (id % 8) * (CS * 2);
         int cy = (id / 8) * (CS * 4);
         // switch image based on animation counter
         //
-        g.drawImage(image,
+        if (!suitUp) {
+            g.drawImage(image,
                     px - offsetX,
                     py - offsetY,
                     px - offsetX + CS,
                     py - offsetY + CS,
                     cx + count * CS,
-                    cy + direction * CS+attackDirection*CS,//+attackDirection*CS,
+                    cy + direction * CS,
                     cx + CS + count * CS,
-                    cy + direction * CS + CS+attackDirection*CS,
+                    cy + direction * CS + CS,
                     null);
+        } else if (suitUp && name.equals("hero")) {
+            g.drawImage(image1,
+                    px - offsetX,
+                    py - offsetY,
+                    px - offsetX + CS,
+                    py - offsetY + CS,
+                    cx + count * CS,
+                    cy + direction * CS,
+                    cx + CS + count * CS,
+                    cy + direction * CS + CS,
+                    null);
+        } else if (suitUp==true && name.equals("hero") == false) {
+            g.drawImage(image,
+                    px - offsetX,
+                    py - offsetY,
+                    px - offsetX + CS,
+                    py - offsetY + CS,
+                    cx + count * CS,
+                    cy + direction * CS,
+                    cx + CS + count * CS,
+                    cy + direction * CS + CS,
+                    null);
+        }
+    }
+
+    public void printInfomation(Graphics g) {
+        Font font = new Font("SansSerif", Font.BOLD, 16);
+            g.setFont(font);
+            g.setColor(Color.YELLOW);
+            g.drawString(map.getMapName() + " (" + map.getCol() + "," + map.getRow() + ")", 4, 16);
+            g.drawString("(" + getX() + "," + getY() + ") ", 4, 32);
+            g.drawString("(" + getPX() + "," + getPY() + ")", 4, 48);
+            g.drawString("Health: " + getHealth() + "/" + getMaxHealth(), 4, 64);
+            g.drawString("Damage: " + getDamage(), 4, 80);
+            g.drawString("Exp: " + getExp() + " Level: " + getLevel(), 4, 96);
+            g.drawString(map.getBgmName(), 4, 112);
     }
 
     public boolean move() {
@@ -126,26 +169,22 @@ public class Human extends Character implements Common {
         int nextY = y;
         if (nextX < 0) nextX = 0;
         if (!map.isHit(nextX, nextY)) {
-            // System.out.println("my"+moveLength);
+
             px -= Human.SPEED;
             if (px < 0) px = 0;
             moveLength += Human.SPEED;
             if (moveLength >= CS) {
-                // pixel-based scrolling is completed
-                // hero moves to left tile
                 x--;
                 px = x * CS;
                 isMoving = false;
-                //System.out.println("LEFT true");
                 return true;
             }
         } else {
             isMoving = false;
             px = x * CS;
             py = y * CS;
-            //System.out.println("LEFT true 2");
         }
-        //System.out.println("LEFT false");
+
         return false;
     }
 
@@ -301,11 +340,11 @@ public class Human extends Character implements Common {
       }
       return false;
     }
+
     public int getDirection(){
       return direction;
     }
     public void setExp(int exp){
-      //while(level<4) if(exp>levelExp[level]) levelUp();
       this.exp=exp;
     }
     public int getExp(){
@@ -396,6 +435,10 @@ public class Human extends Character implements Common {
       this.damage=damage;
       // this.damage=damage;
     }
+    public int getDamageByLevel(){
+      return damageLvl[level];
+    }
+
     public void setDirection(int dir) {
         direction = dir;
     }
@@ -422,11 +465,18 @@ public class Human extends Character implements Common {
     }
 
     public void loadImage(String filename) {
-        try {
-            image = ImageIO.read(getClass().getResource(filename));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+      try {
+          if (filename.equals("image/human-extends.gif")) {
+              image = ImageIO.read(getClass().getResource(filename));
+          } else if (filename.equals("image/trangphuc1.png")){
+              image1 = ImageIO.read(getClass().getResource(filename));
+          }
+      } catch (IOException e) {
+          e.printStackTrace();
+      }
+    }
+    public void suitUp(boolean flag){
+      this.suitUp=flag;
     }
 
     // Animation Class

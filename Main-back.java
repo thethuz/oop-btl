@@ -289,7 +289,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                     checkEvent[0] = 10;
                 }
                 if (treasure.getX() == 11) {
-                    hero.suitUp(true);
+                    Human.suitUp = 1;
                 }
                 if (treasure.getX() == 12) {
                     checkEvent[2] = 12;

@@ -1,29 +1,76 @@
-
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import java.util.Vector;
 
+public class Item{
 
-public class Item extends Event {
+  private int x = 0, y = 10, z = 10;
 
-    private int x, y;
-    private String itemName;
+  private String itemName;
 
-    private static BufferedImage image;
+  private static BufferedImage image;
 
-    public Item(int x, int y, String itemName) {
-        super(x, y, 17, false);
-        this.x = x;
-        this.y = y;
+    public Item() {
 
-        this.itemName = itemName;
-
+    }
+    public void effect(Human human){
+      if (MainPanel.checkEvent[0]==10){
+        human.setDamage(human.getDamageByLevel()*2);
+        z--;
+        if (z <= 0) {
+            z = 89;
+            y--;
+        }
+        if (y <= 0 && x > 0) {
+            y = 59;
+            z--;
+        } else if (x == 0) {
+            if (y <= 1) {
+                y = 0;
+                if (y == 0) {
+                    if (z <= 1) {
+                        z = 0;
+                        human.setDamage(human.getDamageByLevel());
+                        MainPanel.checkEvent[0] = 0;
+                    }
+                }
+            }
+        }
+      }
     }
     public void draw(Graphics g) {
 
-//        g.drawImage(image, 400, 16, null);
-        g.drawString("sơn hai", 400, 16);
+        if (MainPanel.checkEvent[0] == 10) {
+            if (image == null) {
+                loadImage("image/thuoctangluc.png");
+            }
+            g.drawImage(image, 430, 0, 462, 32, 0, 0, 32, 32, null);
+            g.setColor(Color.YELLOW);
+            g.drawString(x + " : " + y, 465, 20);
+            z--;
+            if (z <= 0) {
+                z = 89;
+                y--;
+            }
+            if (y <= 0 && x > 0) {
+                y = 59;
+                z--;
+            } else if (x == 0) {
+                if (y <= 1) {
+                    y = 0;
+                    if (y == 0) {
+                        if (z <= 1) {
+                            z = 0;
+                            //human.setDamage(human.getDamageByLevel()/2);
+                            MainPanel.checkEvent[0] = 0;
+                        }
+                    }
+                }
+            }
+          }
     }
 
     private void loadImage(String filename) {

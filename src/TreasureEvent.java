@@ -3,7 +3,7 @@ public class TreasureEvent extends Event {
 
     private int x;//?dafuq x mean?
 
-    public int getType() {
+    public int getX() {
         return x;
     }
 
