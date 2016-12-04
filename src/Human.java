@@ -94,9 +94,9 @@ public class Human extends Character implements Common {
                     px - offsetX + CS,
                     py - offsetY + CS,
                     cx + count * CS,
-                    cy + direction * CS,
+                    cy + direction * CS +attackDirection*CS,
                     cx + CS + count * CS,
-                    cy + direction * CS + CS,
+                    cy + direction * CS + CS+attackDirection*CS,
                     null);
         } else if (suitUp && name.equals("hero")) {
             g.drawImage(image1,
@@ -105,9 +105,9 @@ public class Human extends Character implements Common {
                     px - offsetX + CS,
                     py - offsetY + CS,
                     cx + count * CS,
-                    cy + direction * CS,
+                    cy + direction * CS+attackDirection*CS,
                     cx + CS + count * CS,
-                    cy + direction * CS + CS,
+                    cy + direction * CS + CS+attackDirection*CS,
                     null);
         } else if (suitUp==true && name.equals("hero") == false) {
             g.drawImage(image,
