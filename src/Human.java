@@ -5,7 +5,7 @@ import javax.imageio.*;
 
 public class Human extends Character implements Common {
     private static final int SPEED = 4;
-    public static  final double PROB_MOVE = 0.02;
+    private static  final double PROB_MOVE = 0.02;
     private boolean isDead=false;
     private static BufferedImage image;
     private static BufferedImage image1;
@@ -477,6 +477,9 @@ public class Human extends Character implements Common {
     }
     public void suitUp(boolean flag){
       this.suitUp=flag;
+    }
+    public double getProbMove(){
+      return PROB_MOVE;
     }
 
     // Animation Class

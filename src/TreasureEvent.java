@@ -1,17 +1,17 @@
 public class TreasureEvent extends Event {
     private String itemName;
 
-    private int x;//?dafuq x mean?
+    private int type;
 
-    public int getX() {
-        return x;
+    public int getType() {
+        return type;
     }
 
     public TreasureEvent(int x, int y, String itemName) {
 
         super(x, y, 17, false);
         this.itemName = itemName;
-        this.x = x;
+        this.type = x;
     }
 
     public String getItemName() {

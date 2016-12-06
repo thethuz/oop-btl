@@ -11,7 +11,5 @@ public abstract class Event {
         this.isHit = isHit;
     }
 
-    public String toString() {
-        return x + ":" + y + ":" + id + ":" + isHit;
-    }
+    public String toString();
 }

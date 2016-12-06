@@ -306,13 +306,13 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             if (treasure != null) {
                 waveEngine.play("treasure");
                 messageWindow.setMessage("HERO DISCOVERED/" + treasure.getItemName());
-                if (treasure.getX() == 10) {
+                if (treasure.getType() == 10) {
                     checkEvent[0] = 10;
                 }
-                if (treasure.getX() == 11) {
+                if (treasure.getType() == 11) {
                     hero.suitUp(true);
                 }
-                if (treasure.getX() == 12) {
+                if (treasure.getType() == 12) {
                     checkEvent[2] = 12;
                 }
                 messageWindow.show();
@@ -404,7 +404,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                   //System.out.println("monster "+i+" is moving"+c.getDirection());
                   m.move();
                   // System.out.println(m.getX()+";"+m.getY());
-              } else if ( (m.isMonsterAttacking()==false) && (rand.nextDouble() < Monster.PROB_MOVE) ) {
+              } else if ( (m.isMonsterAttacking()==false) && (rand.nextDouble() < Monster.getProbMove()) ) {
                   m.setDirection(rand.nextInt(4));
                   m.setMoving(true);
               }
@@ -422,7 +422,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
               if (m.attack()) {
                   //System.out.println("Monster "+i+" is attacking"+c.getDirection());
 
-              } else if (rand.nextDouble() < Monster.PROB_MOVE) {
+              } else if (rand.nextDouble() < Monster.getProbMove()) {
                   // System.out.println("Monster "+i+": Hahaha");
                   m.setDirection(rand.nextInt(4));
                   m.setMoving(true);
@@ -440,7 +440,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             if (c.getMoveType() == 1) {
                 if (c.isMoving()) {
                     c.move();
-                } else if (rand.nextDouble() < Human.PROB_MOVE) {
+                } else if (rand.nextDouble() < Human.getProbMove()) {
                     c.setDirection(rand.nextInt(4));
                     c.setMoving(true);
                 }

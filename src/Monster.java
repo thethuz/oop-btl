@@ -4,7 +4,7 @@ import java.awt.image.*;
 import javax.imageio.*;
 public class Monster extends Character implements Common{
   private static final int SPEED = 4;
-  public static  final double PROB_MOVE = 0.02;
+  private static final double PROB_MOVE = 0.02;
 
   private static BufferedImage image;
   private int id;
@@ -399,5 +399,8 @@ public class Monster extends Character implements Common{
 
   public int getDefence(){
     return defence;
+  }
+  public double getProbMove(){
+    return PROB_MOVE;
   }
 }
