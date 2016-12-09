@@ -11,6 +11,6 @@ public class MoveEvent extends Event {
     }
 
     public String toString() {
-        return "MOVE:" + super.toString() + ":" + destMapNo + ":" + destX + ":" + destY;
+        return "MOVE:" + ":" + destMapNo + ":" + destX + ":" + destY;
     }
 }

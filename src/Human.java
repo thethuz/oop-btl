@@ -44,7 +44,13 @@ public class Human extends Character implements Common {
     private Thread threadAttack;
     // reference to Map
     private Map map;
-
+    private Item item;
+    public Item getItem(){
+      return item;
+    }
+    public void setItem(Item item){
+      this.item=item;
+    }
 
     public Human(int x, int y, int id, int direction, int moveType, Map map,String name) {
         // init human
@@ -134,6 +140,9 @@ public class Human extends Character implements Common {
             g.drawString("Damage: " + getDamage(), 4, 80);
             g.drawString("Exp: " + getExp() + " Level: " + getLevel(), 4, 96);
             g.drawString(map.getBgmName(), 4, 112);
+            if(item!=null){
+              item.draw(g);
+            }
     }
 
     public boolean move() {
@@ -360,6 +369,7 @@ public class Human extends Character implements Common {
     public TreasureEvent search() {
         Event event = map.checkEvent(x, y);
         if (event instanceof TreasureEvent) {
+
             return (TreasureEvent)event;
         }
         return null;

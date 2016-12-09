@@ -12,13 +12,18 @@ public class TreasureEvent extends Event {
         super(x, y, 17, false);
         this.itemName = itemName;
         this.type = x;
+        System.out.println(itemName);
     }
 
     public String getItemName() {
-        return itemName;
+        return this.itemName;
     }
+    public void setItemName(String itemName){
+      this.itemName=itemName;
+    }
+    //public String getItem
 
     public String toString() {
-        return "TREASURE:" + super.toString() + ":" + itemName;
+        return "TREASURE:"  + ":" + itemName;
     }
 }

@@ -11,5 +11,5 @@ public abstract class Event {
         this.isHit = isHit;
     }
 
-    public String toString();
+    public abstract String toString();
 }

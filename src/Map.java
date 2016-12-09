@@ -26,7 +26,7 @@ public class Map implements Common {
     // events in this map
     private Vector<Event> events = new Vector<Event>();
 
-    private Item item = new Item();
+    // private Item item;//=new Item(0,0,0);
     // reference to MainPanel
     private MainPanel panel;
 
@@ -34,17 +34,20 @@ public class Map implements Common {
     private String bgmName;
 
     public Map(String mapFile, String eventFile, String bgmName, MainPanel panel) {
-      //Khởi tạo 1 map, nhận vào map đc mã hóa=số, file sự kiện, file âm nhạc, menu điều khiển
+      //Khởi tạo 1 map, nhận vào tên map, tên file sự kiện, tên file âm nhạc, tên menu điều khiển
         this.mapFile = mapFile;
         this.bgmName = bgmName;
 
         load(mapFile);
-        loadEvent(eventFile);//Nạp vào image/mapchip.gif là tài nguyên của map
+        loadEvent(eventFile);
+        //Nạp vào image/mapchip.gif là tài nguyên của map
         if (image == null) {
             loadImage("image/mapchip.gif");
         }
     }
-
+    // public void setItem(int x, int y, int z){
+    //   item=new Item(x,y,z);
+    // }
     //vẽ map
     public void draw(Graphics g, int offsetX, int offsetY) {
         // display xrange of map (unit:pixel)
@@ -87,7 +90,7 @@ public class Map implements Common {
             }
         }
 
-        // vẽ nhân vật lên map
+        // vẽ các đối tượng lên map
         for (int i = 0; i < humans.size(); i++) {
             Human c = humans.get(i);
             c.draw(g, offsetX, offsetY);
@@ -97,13 +100,16 @@ public class Map implements Common {
             m.draw(g, offsetX, offsetY);
         }
 
-        if (bgmName.equals("castle")) {
-            item.draw(g);
-            item.effect(humans.get(3));
-        } else {
-            item.draw(g);
-            item.effect(humans.get(0));
-        }
+        // if (bgmName.equals("castle")&&item!=null) {
+        //     //System.out.println("xxxx");
+        //     item.draw(g);
+        //     item.effect(humans.get(3));
+        // } else {
+        //   if(item!=null){
+        //     item.draw(g);
+        //     item.effect(humans.get(0));
+        //   }
+        // }
     }
     public boolean isUnflyable(int x, int y){
       if(map[y][x]==5) return true;
@@ -326,6 +332,9 @@ public class Map implements Common {
         int x = Integer.parseInt(st.nextToken());
         int y = Integer.parseInt(st.nextToken());
         String itemName = st.nextToken();
+        // if (itemName=="DAMAGE-UP") {
+        //   item=new Item (1,5,10);
+        // }
         TreasureEvent t = new TreasureEvent(x, y, itemName);
         events.add(t);
     }

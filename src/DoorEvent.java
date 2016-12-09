@@ -4,6 +4,6 @@ public class DoorEvent extends Event {
     }
 
     public String toString() {
-        return "DOOR:" + super.toString();
+        return "DOOR" ;
     }
 }

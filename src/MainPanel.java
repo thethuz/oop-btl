@@ -21,7 +21,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
     // our hero!
     private Human hero;
 
-    public static int[] checkEvent = new int[3];
+    // public static int[] checkEvent = new int[3];
 
     // our hero's enemy!
 
@@ -79,8 +79,8 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
         // create human
         System.out.println("Khoi tao");
-        hero = new Human(6, 6, 0, DOWN, 0, maps[mapNo],"hero");
-        //Human hero1 = new Human(6, 7, 0, UP, 0, maps[mapNo]);
+        hero=new Human(6, 6, 0, DOWN, 0, maps[mapNo],"hero");
+
         monster = new Monster (6,7, 0, DOWN, 0, maps[mapNo]);
 
         arrangeMonster(1,7);
@@ -306,14 +306,20 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             if (treasure != null) {
                 waveEngine.play("treasure");
                 messageWindow.setMessage("HERO DISCOVERED/" + treasure.getItemName());
-                if (treasure.getType() == 10) {
-                    checkEvent[0] = 10;
+                // System.out.println(treasure.getItemName());
+                if (treasure.getItemName().equals("DOUBLE-DAMAGE")) {
+                  System.out.println(treasure.getItemName());
+                  Item doubledamge=new Item(1,5,10);
+                  hero.setItem(doubledamge);
+                  hero.getItem().effect(hero);
+                  //maps[mapNo].setItem(1,5,10);
+                    // checkEvent[0] = 10;
                 }
                 if (treasure.getType() == 11) {
                     hero.suitUp(true);
                 }
                 if (treasure.getType() == 12) {
-                    checkEvent[2] = 12;
+                    // checkEvent[2] = 12;
                 }
                 messageWindow.show();
                 maps[mapNo].removeEvent(treasure);
@@ -322,12 +328,12 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
             // door
             DoorEvent door = hero.open();
-            if (door != null && checkEvent[2] == 12) {
+            if (door != null) {
                 waveEngine.play("door");
                 maps[mapNo].removeEvent(door);
                 return;
             } else {
-                messageWindow.setMessage("YOU NEED TO HAVE THE KEY TO OPEN");
+                messageWindow.setMessage("THERE IS NO ONE IN THIS DIRECTION");
                     messageWindow.show();
             }
 
@@ -365,6 +371,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                     int tempLevel=hero.getLevel();
                     int tempDamage=hero.getDamage();
                     int tempExp=hero.getExp();
+                    Item tempItem=hero.getItem();
                     maps[mapNo].removeHuman(hero);
 
                     //Human heroTemp=new Human();
@@ -374,12 +381,13 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
 
                     //maps[mapNo].addHuman(hero);
 
-                    hero = new Human(m.destX, m.destY, 0, DOWN, 0, maps[mapNo],"hero");
+                    hero=new Human(m.destX, m.destY, 0, DOWN, 0, maps[mapNo],"hero");
                     //tempHero.setHealth
                     hero.setHealth(tempHealth);
                     hero.setDamage(tempDamage);
                     hero.setLevel(tempLevel);
                     hero.setExp(tempExp);
+                    hero.setItem(tempItem);
                     maps[mapNo].addHuman(hero);
                     //
 
@@ -404,7 +412,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
                   //System.out.println("monster "+i+" is moving"+c.getDirection());
                   m.move();
                   // System.out.println(m.getX()+";"+m.getY());
-              } else if ( (m.isMonsterAttacking()==false) && (rand.nextDouble() < Monster.getProbMove()) ) {
+              } else if ( (m.isMonsterAttacking()==false) && (rand.nextDouble() < m.getProbMove()) ) {
                   m.setDirection(rand.nextInt(4));
                   m.setMoving(true);
               }
@@ -422,7 +430,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
               if (m.attack()) {
                   //System.out.println("Monster "+i+" is attacking"+c.getDirection());
 
-              } else if (rand.nextDouble() < Monster.getProbMove()) {
+              } else if (rand.nextDouble() < m.getProbMove()) {
                   // System.out.println("Monster "+i+": Hahaha");
                   m.setDirection(rand.nextInt(4));
                   m.setMoving(true);
@@ -440,7 +448,7 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
             if (c.getMoveType() == 1) {
                 if (c.isMoving()) {
                     c.move();
-                } else if (rand.nextDouble() < Human.getProbMove()) {
+                } else if (rand.nextDouble() < c.getProbMove()) {
                     c.setDirection(rand.nextInt(4));
                     c.setMoving(true);
                 }
@@ -510,7 +518,5 @@ class MainPanel extends JPanel implements KeyListener, Runnable, Common {
         }
     }
 
-    public int[] getCheckEvent() {
-        return checkEvent;
-    }
+
 }
